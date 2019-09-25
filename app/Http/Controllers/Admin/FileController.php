@@ -48,12 +48,11 @@ class FileController extends Controller
     }
 
     public function store(MultimediaStoreRequest $request)
-    {
- 
+    { 
         $file    = $request->file('upload_image');
         $other   = $request->file('small');
         $title   = $request['title'];
-        $type   = $request['type'];
+        $type    = $request['type'];
 
         //primera imagen
         $filenamewithextension = $file->getClientOriginalName();
@@ -76,55 +75,32 @@ class FileController extends Controller
                 Storage::disk('sftp')->put('public_html/images/thumbnails/'.$filenametostoreother.'',fopen($other,'r+'));
             }
         }
-
-        //panoramica por depto, falta la responsiva
-        elseif ($request['type'] == 2) {
-            if ($request->hasFile('upload_image')) {
-                Storage::disk('sftp')->put('public_html/images/deptos/'.$filenametostore.'',fopen($file,'r+'));
-            }
-        }
-        
         //Destacados por departamento
         elseif ($request['type'] == 3) {
             if ($request->hasFile('upload_image')) {
                 Storage::disk('sftp')->put('public_html/images/destinos/promos/'.$title.'/'.$filenametostore.'',fopen($file,'r+'));
             }
         }
-        //FilesController es el 4 Mega Ofertas
         //Temporada, otono-invierno
         elseif ($request['type'] == 5) {
             if ($request->hasFile('upload_image')) {
                 Storage::disk('sftp')->put('public_html/images/destinos/home/'.$title.'/'.$filenametostore.'',fopen($file,'r+'));
             }
         }
-
         //Bloqueos
         elseif ($request['type'] == 6) {
             if ($request->hasFile('upload_image')) {
                 Storage::disk('sftp')->put('public_html/images/destinos/home/bloqueo/'.$filenametostore.'',fopen($file,'r+'));
             }
         }
-
         //Favoritos
         elseif ($request['type'] == 12) {
             if ($request->hasFile('upload_image')) {
                 Storage::disk('sftp')->put('public_html/images/destinos/home/favoritos/'.$filenametostore.'',fopen($file,'r+'));
             }
         }
-        //aun no esta terminado del todo
-        elseif ($request['type'] == 7) {
-            if ($request->hasFile('upload_image')) {
-                Storage::disk('sftp')->put('public_html/deptos/banner-depto/'.$title.'/'.$filenametostore.'',fopen($file,'r+'));
-            }
-        }
-        if ($request['type'] == 11) {
-            if ($request->hasFile('upload_image')) {
-                Storage::disk('sftp')->put('public_html/deptos/recommendados/'.$filenametostore.'',fopen($file,'r+'));
-            }
-        }
 
-        $image = Multimedia::create($request->all());
-
+        Multimedia::create($request->all());
         return redirect()->route('file.index')->with('info', 'Imagen cargada');
     }
 

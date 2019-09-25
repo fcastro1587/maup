@@ -56,11 +56,11 @@ return [
 
         'db3' => [
         'driver' => 'mysql',
-        'host' => env('DB3_HOST', 'host.megatravel.online'),
+        'host' => env('DB3_HOST', '127.0.0.1'),
         'port' => env('DB3_PORT', '3306'),
         'database' => env('DB3_DATABASE', 'megamx_db'),
-        'username' => env('DB3_USERNAME', 'megamx_con'),
-        'password' => env('DB3_PASSWORD', 'zsBEZFslMZuv'),
+        'username' => env('DB3_USERNAME', 'root'),
+        'password' => env('DB3_PASSWORD', ''),
         'unix_socket' => env('DB3_SOCKET', ''),
         'charset' => 'utf8mb4',
         'collation' => 'utf8mb4_unicode_ci',

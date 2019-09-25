@@ -40,15 +40,11 @@ class FilesController extends Controller
 
     public function store(Request $request)
     {
-
-        $destino = $request['title'];
-
+        $destino   = $request['title'];
         $files     = $request->file('upload_image');
         $fileother = $request->file('uploadsmall');
 
-        $name      = $files->getClientOriginalName();
-        $nameother = $fileother->getClientOriginalName();
-
+        //array para 7(listado por depto) y 8(slide rprincipal)
         if ($request['name'])              $sync_name[1]    = $request['name'];
         if ($request['small'])             $sync_name[2]    = $request['small'];
 
@@ -70,57 +66,93 @@ class FilesController extends Controller
         if ($request['type'])              $sync_type[1]    = $request['type'];
         if ($request['typeother'])         $sync_type[2]    = $request['typeother'];
 
-
-        if ($request['type'] == 4) {
-            if ($request->hasFile('upload_image')) {
-                $file                  = $request->file('upload_image');
-                $filenamewithextension = $file->getClientOriginalName();
-                $filename              = pathinfo($filenamewithextension, PATHINFO_FILENAME);
-                $extension             = $file->getClientOriginalExtension();
-                $filenametostore       = $filename . '.' . $extension;
-                Storage::disk('sftp')->put('public_html/images/destinos/home/megaofertas/' . $filenametostore . '', fopen($file, 'r+'));
+        //Panoramica por departamento
+        elseif ($request['type'] == 2) {
+            if ($request->hasFile('upload_image') || $request->hasFile('uploadsmall')) {
+                $name                 = $files->getClientOriginalName();
+                $filenameother        = $fileother->getClientOriginalName();
+                $filenameother        = pathinfo($filenameother, PATHINFO_FILENAME);
+                $extensionother       = $fileother->getClientOriginalExtension();
+                $filename             = str_replace('320','.',$filenameother);
+                $filenametostoreother = $filename.$extensionother;
+                Storage::disk('sftp')->put('public_html/images/deptos/'.$name.'', fopen($files, 'r+'));
+                Storage::disk('sftp')->put('public_html/images/deptos/responsive/'.$filenametostoreother.'', fopen($fileother, 'r+'));
             }
-        } elseif ($request['type'] == 11) {
+        }
+        //Mega Ofertas
+        elseif ($request['type'] == 4) {
             if ($request->hasFile('upload_image')) {
-                foreach ($request->file('upload_image') as $files) {
-                    $name = $files->getClientOriginalName();
-                    Storage::disk('sftp')->put('public_html/images/recommend/' . $name . '', fopen($files, 'r+'));
+                foreach ($request->file('upload_image') as $filemega) {
+                    $namemega = $filemega->getClientOriginalName();
+                    Storage::disk('sftp')->put('public_html/images/destinos/home/megaofertas/' . $namemega . '', fopen($filemega, 'r+'));
                 }
             }
-        } elseif ($request['type'] == 7) {
+        } 
+        //Recomendados, aparece en cada MT
+        elseif ($request['type'] == 11) {
+            if ($request->hasFile('upload_image')) {
+                foreach ($request->file('upload_image') as $filesrec) {
+                    $namerec = $filesrec->getClientOriginalName();
+                    Storage::disk('sftp')->put('public_html/images/recommend/' . $namerec . '', fopen($filesrec, 'r+'));
+                }
+            }
+        } 
+        //Imagen en listado de cada departamento
+        elseif ($request['type'] == 7) {
             if ($request->hasFile('upload_image') || $request->hasFile('uploadsmall')) {
-
+                $name      = $files->getClientOriginalName();
+                $nameother = $fileother->getClientOriginalName();
                 Storage::disk('sftp')->put('public_html/images/destinos/banner-depto/' . $destino . '/' . $name . '', fopen($files, 'r+'));
                 Storage::disk('sftp')->put('public_html/images/destinos/banner-depto/' . $destino . '/' . $nameother . '', fopen($fileother, 'r+'));
             }
-        }
+            Multimedia::create([
+                'name'        => $sync_name[1],
+                'title'       => $sync_title[1],
+                'country'     => $sync_country[1],
+                'city'        => $sync_city[1],
+                'description' => $sync_des[1],
+                'size'        => $sync_size[1],
+                'type'        => $sync_type[1],
+            ]);
+
+            Multimedia::create([
+                'name'        => $sync_name[2],
+                'title'       => $sync_title[2],
+                'country'     => $sync_country[2],
+                'city'        => $sync_city[2],
+                'description' => $sync_des[2],
+                'size'        => $sync_size[2],
+                'type'        => $sync_type[2],
+            ]);
+        } 
+        //Slider principal Home
         elseif ($request['type'] == 8) {
             if ($request->hasFile('upload_image') || $request->hasFile('uploadsmall')) {
-
+                $name      = $files->getClientOriginalName();
+                $nameother = $fileother->getClientOriginalName();
                 Storage::disk('sftp')->put('public_html/images/slider-home/' . $name . '', fopen($files, 'r+'));
                 Storage::disk('sftp')->put('public_html/images/slider-home/320x340/' . $nameother . '', fopen($fileother, 'r+'));
             }
-        }
-        
-        Multimedia::create([
-            'name'        => $sync_name[1],
-            'title'       => $sync_title[1],
-            'country'     => $sync_country[1],
-            'city'        => $sync_city[1],
-            'description' => $sync_des[1],
-            'size'        => $sync_size[1],
-            'type'        => $sync_type[1],
-        ]);
+            Multimedia::create([
+                'name'        => $sync_name[1],
+                'title'       => $sync_title[1],
+                'country'     => $sync_country[1],
+                'city'        => $sync_city[1],
+                'description' => $sync_des[1],
+                'size'        => $sync_size[1],
+                'type'        => $sync_type[1],
+            ]);
 
-         Multimedia::create([
-            'name'        => $sync_name[2],
-            'title'       => $sync_title[2],
-            'country'     => $sync_country[2],
-            'city'        => $sync_city[2],
-            'description' => $sync_des[2],
-            'size'        => $sync_size[2],
-            'type'        => $sync_type[2],
-        ]);
+            Multimedia::create([
+                'name'        => $sync_name[2],
+                'title'       => $sync_title[2],
+                'country'     => $sync_country[2],
+                'city'        => $sync_city[2],
+                'description' => $sync_des[2],
+                'size'        => $sync_size[2],
+                'type'        => $sync_type[2],
+            ]);
+        }
 
         return redirect()->route('file.index')->with('info', 'Imagen cargada');
     }

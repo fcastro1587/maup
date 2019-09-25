@@ -63,7 +63,7 @@
       </div>
       @can('file.create')
       @php $var = 2; @endphp
-      <a href="{{route('file.createfile', $var)}}" class="small-box-footer">Crear <i class="fa fa-arrow-circle-right"></i></a>
+      <a href="{{route('files.createupload', $var)}}" class="small-box-footer">Crear <i class="fa fa-arrow-circle-right"></i></a>
       @endcan
     </div>
   </div>

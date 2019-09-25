@@ -115,11 +115,13 @@
           @endcan
 
           @can('revistas.index')
+          <li class="header">REVISTAS</li>
           <li><a href="{{ route('revistas.index')}}"><i class="fa fa-book"></i><span>Magazines</span></a></li>
           @endcan
 
           @can('file.index')
-          <li><a href="{{ route('file.index')}}"><i class="fa fa-book"></i><span>Cargar Imagenes</span></a></li>
+          <li class="header">IMAGENES</li>
+          <li><a href="{{ route('file.index')}}"><i class="fa  fa-image"></i><span>Cargar Imagenes</span></a></li>
           @endcan
 
           <!--@can('filters.index')
@@ -131,4 +133,9 @@
           <li><a href="{{ route('admintc.admin')}}"><i class="fa fa-filter"></i><span>Tipo de cambio</span></a></li>
           @endcan-->
 
-          <!-
+          <!--<li><a href="{{ url('tools/vi.php')}}"><i class="fa fa-filter"></i><span>tools</span></a></li>-->
+
+        </ul>
+    </section>
+    <!-- /.sidebar -->
+</aside>

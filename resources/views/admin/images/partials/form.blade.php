@@ -31,14 +31,7 @@
 
 <div class="col-md-4">
     <div class="form-group">
-        <!-- {{ Form::select('title', [null => 'Seleccione'] +
-                        [
-                        'Principal'     => 'Slider Mega en Vivo',
-                        ],
-                        null, ['class' => 'form-control input']) }} -->
-
         @yield('detail')
-        @yield('panoramic')
         @yield('featured')
         @yield('otonoinvierno')
         @yield('bloqueo')
@@ -67,14 +60,7 @@
 
 <div class="col-md-4">
     <div class="form-group">
-        <!--{!! Form::select('size', [null => 'Seleccione un tamaño de imagen'] +
-        [
-        'Principal' => 'Slider Mega en Vivo'
-        ],
-        null, ['class' => 'form-control input']) !!}-->
-
         @yield('sizedetail')
-        @yield('sizepanoramic')
         @yield('sizefeatured')
         @yield('sizeotonoinvierno')
         @yield('sizebloqueo')
@@ -85,17 +71,7 @@
 
 <div class="col-md-4">
     <div class="form-group">
-        <!--  {!! Form::select('type', [null => 'Seleccione un tipo de Imagen'] +
-        [
-        '8' => 'Home Slider Principa fondo (1700x566)',
-        '9' => 'Home Letras Slider principal (1700x566)',
-        '10' => 'Home responsive (320x400)',
-        '11' => 'Recomendado (324x152)',
-        '13' => 'Slider Principal Mega en vivo',
-        ],
-        null, ['class' => 'form-control input']) !!}-->
         @yield('typedetail')
-        @yield('typepanoramic')
         @yield('typefeatured')
         @yield('typeotonoinvierno')
         @yield('typebloqueo')

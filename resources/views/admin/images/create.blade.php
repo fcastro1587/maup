@@ -93,40 +93,6 @@
             {!! Form::select('type',['1' => 'Detalle (844x474)',],null, ['class' => 'form-control input', 'readonly' => true]) !!}
             @endsection
 
-            <!--tipo 2-->
-            @elseif($var == 2)
-            <!--titulo-->
-            @section('panoramic')
-            {!! Form::select('title', [null => 'Seleccione un Destino'] +
-            [
-            'europa' => 'Europa',
-            'moriente' => 'Medio Oriente',
-            'canada' => 'Canadá',
-            'asia' => 'Asia',
-            'africa' => 'Africa',
-            'pacifico' => 'Pacifico',
-            'sudamerica' => 'Sudamérica',
-            'usa' => 'Estados Unidos',
-            'camerica' => 'Centroamerica',
-            'caribe' => 'Caribe',
-            'mexico' => 'México',
-            'edeportivo' => 'Eventos Deportivos',
-            'cruceros' => 'Cruceros',
-            'jviajera' => 'Juventud Viajera',
-            'exoticos' => 'Exoticos',
-            ],null, ['class' => 'form-control input']) !!}
-            @endsection
-
-            <!--tamaño de imagen-->
-            @section('sizepanoramic')
-            {!! Form::select('size',['1918x300' => '1918x300',],null, ['class' => 'form-control input', 'readonly' => true]) !!}
-            @endsection
-
-            <!--tipo de imagen-->
-            @section('typepanoramic')
-            {!! Form::select('type',['2' => 'Panoramica (1918x300)',],null, ['class' => 'form-control input', 'readonly' => true]) !!}
-            @endsection
-
             <!--tipo 3-->
             @elseif($var == 3)
             <!--titulo-->

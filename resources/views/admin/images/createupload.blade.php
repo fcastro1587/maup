@@ -67,8 +67,7 @@
     <div class="col-md-12">
 
         <form action="{{ route('files.store') }}" enctype="multipart/form-data" method="POST">
-
-            @if($var == 7)
+            @if($var == 2)
             <div class="col-md-6">
                 <div class="col-md-12">
                     <div class="form-group">
@@ -76,7 +75,52 @@
                             <span class="input-group-btn">
                                 <span class="btn btn-success btn-file">
                                     Image…
-                                    {!! Form::file('upload_image', ['id' => 'imgInp', 'multiple' => true]) !!}
+                                    {!! Form::file('upload_image', ['id' => 'imgInp']) !!}
+                                </span>
+                            </span>
+                            {{ Form::text('name', null, ['class' => 'form-control file', 'id' => 'urlname', 'readonly' => 'true']) }}
+                            <span class="input-group-btn">
+                                <span id="clear" class="btn btn-info">Limpiar</span>
+                            </span>
+                            </span>
+                        </div>
+                        <div class="file-preview">
+                            <img id='img-upload' />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        {!! Form::select('type',['2' => 'Panoramica por destino (1918x300)',],null, ['class' => 'form-control input', 'readonly' => true]) !!}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-btn">
+                                <span class="btn btn-success btn-file">
+                                    Img Mosaico…
+                                    {!! Form::file('uploadsmall', ['id' => 'imgInp1']) !!}
+                                </span>
+                            </span>
+                            {{ Form::text('small', null, ['class' => 'form-control file', 'id' => 'urlname1', 'readonly' => 'true']) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @elseif($var == 7)
+            <div class="col-md-6">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-btn">
+                                <span class="btn btn-success btn-file">
+                                    Image…
+                                    {!! Form::file('upload_image', ['id' => 'imgInp']) !!}
                                 </span>
                             </span>
                             {{ Form::text('name', null, ['class' => 'form-control file', 'id' => 'urlname', 'readonly' => 'true']) }}
@@ -221,7 +265,7 @@
                             <span class="input-group-btn">
                                 <span class="btn btn-success btn-file">
                                     Image…
-                                    {!! Form::file('upload_image', ['id' => 'imgInp', 'multiple' => true]) !!}
+                                    {!! Form::file('upload_image', ['id' => 'imgInp']) !!}
                                 </span>
                             </span>
                             {{ Form::text('name', null, ['class' => 'form-control file', 'id' => 'urlname', 'readonly' => 'true']) }}
