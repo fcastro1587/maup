@@ -1,0 +1,53 @@
+.dark, .btn-dark{
+	background: #343a40;
+	color: #ffffff;
+}
+.btn-dark{
+	padding: 8px 20px;
+	border-radius: 5px;
+}
+.btn-dark:hover{
+	background: #1e282c;
+	color: #ffffff;
+}	
+#viajes_length label select,
+#alert_length label select,
+#blq_length label select,
+#tours_length label select,
+#city_length label select,
+#visas_length label select,
+#congratulation_length label select,
+#offer_length label select{
+	border-radius: 5px;
+	background: #337ab7;
+	color: #ffffff;
+	border: 2px solid #337ab7;
+}
+#viajes_filter label,
+#alert_filter label,
+#blq_filter label,
+#tours_filter label,
+#city_filter label,
+#visas_filter label,
+#offer_filter label,
+#congratulation_filter label{
+	float: right;
+	width: 80%;
+	text-align: right;
+}
+#viajes_filter label input,
+#alert_filter label input,
+#blq_filter label input,
+#tours_filter label input,
+#city_filter label input,
+#visas_filter label input,
+#offer_filter label input,
+#congratulation_filter label input{
+	border-radius: 5px;
+	float: right;
+	width: 80%;
+	border: 2px solid #337ab7;
+}
+.tb-viaje{
+	margin-top: 20px;
+}
