@@ -220,6 +220,14 @@
 		{{ Form::textarea('hotels_table', null, ['class' => 'form-control', 'id' => 'hotels_table']) }}
 	</div>
 </div>
+
+<div class="col-md-12">
+	<div class="form-group">
+		<i class="fa fa-fw fa-table"></i>
+		{{ Form::label('additional_notes', 'Notas Adicionales') }}
+		{{ Form::textarea('additional_notes', null, ['class' => 'form-control', 'id' => 'additional_notes']) }}
+	</div>
+</div>
 </div>
 
 <div class="panel panel-primary">
@@ -560,6 +568,7 @@
 	$('#itinerary').ckeditor();
 	$('#price_table').ckeditor();
 	$('#hotels_table').ckeditor();
+	$('#additional_notes').ckeditor();
 </script>
 <script>
 	$(document).ready(function() {

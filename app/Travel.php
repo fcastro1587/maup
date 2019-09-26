@@ -26,6 +26,7 @@ class Travel extends Model
       'rooms_id',
       'price_table',
       'hotels_table',
+      'additional_notes',
       'operator',
       'circuit',
       'status',
