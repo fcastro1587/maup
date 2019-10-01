@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use File;
+use App\Travel;
 use App\Multimedia;
+use App\Header;
 use App\Country;
 use App\City;
 use Illuminate\Support\Facades\Storage;
@@ -20,6 +22,24 @@ class FilesController extends Controller
         $this->middleware('permission:files.show')->only('show');
         $this->middleware('permission:files.edit')->only(['edit', 'update']);
     }
+
+    /*******************************************************************************
+     *
+     *Función para la conexion de la api y traer bloqueos
+     *
+     *******************************************************************************/
+    public function get_data($url)
+    {
+        $ch = curl_init();
+        $timeout = 5;
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+        $data = curl_exec($ch);
+        curl_close($ch);
+        return $data;
+    }
+
     public function index()
     {
         //
@@ -40,9 +60,13 @@ class FilesController extends Controller
 
     public function store(Request $request)
     {
-        $destino   = $request['title'];
-        $files     = $request->file('upload_image');
-        $fileother = $request->file('uploadsmall');
+
+
+        $clv        = $request['mt'];
+        $destino    = $request['title'];
+
+        $files      = $request->file('upload_image');
+        $fileother  = $request->file('uploadsmall');
 
         //array para 7(listado por depto) y 8(slide rprincipal)
         if ($request['name'])              $sync_name[1]    = $request['name'];
@@ -66,28 +90,86 @@ class FilesController extends Controller
         if ($request['type'])              $sync_type[1]    = $request['type'];
         if ($request['typeother'])         $sync_type[2]    = $request['typeother'];
 
-        //Panoramica por departamento
-        elseif ($request['type'] == 2) {
-            if ($request->hasFile('upload_image') || $request->hasFile('uploadsmall')) {
-                $name                 = $files->getClientOriginalName();
-                $filenameother        = $fileother->getClientOriginalName();
-                $filenameother        = pathinfo($filenameother, PATHINFO_FILENAME);
-                $extensionother       = $fileother->getClientOriginalExtension();
-                $filename             = str_replace('320','.',$filenameother);
-                $filenametostoreother = $filename.$extensionother;
-                Storage::disk('sftp')->put('public_html/images/deptos/'.$name.'', fopen($files, 'r+'));
-                Storage::disk('sftp')->put('public_html/images/deptos/responsive/'.$filenametostoreother.'', fopen($fileother, 'r+'));
-            }
+
+        if (isset($request['mt']) || isset($request['title'])) {
+
+        if ($request['type'] == 2) {  //Panoramica por departamento
+            
+            Header::where('header_department', $request['title'])->delete(); //borra los datos  de la tabla para ingresra uno nuevo
+
+                $viaje         = Travel::where('mt', '=', $request['mt'])->first();
+
+                if ($viaje != null) {
+                    Header::create([
+                        'header_mt'          => $request['mt'],
+                        'header_department'  => $request['title'],
+                        'img'                => '2545',
+                        'order'              => '1',
+                        'active_head'        => '1',
+                    ]);
+                } elseif ($viaje == null) {
+
+                    $blq = $this->get_data('https://www.megatravel.com.mx/tester/detail/12059');
+                    $blq = json_decode($blq, true);
+
+                    if (isset($blq['code'])) {
+                        return "MT Inactivo";
+                    } else {
+                        Header::create([
+                            'bloqueo_mt'         => $request['mt'],
+                            'header_department'  => $request['title'],
+                            'img'                => '2545',
+                            'order'              => '1',
+                            'active_head'        => '1',
+                        ]);
+                    }
+                }
+
+
+            //dd($request->all());
+            /* if ($request->hasFile('upload_image') || $request->hasFile('uploadsmall')) {
+                $files                = $request->file('upload_image');
+                $fileother            = $request->file('uploadsmall');
+
+                if ($request['title'] == 'europa') {
+                    $name                 = $files->getClientOriginalName();
+                    $name                 = "viaje-a-europa.jpg";
+
+                    $nameother            = $fileother->getClientOriginalName();
+                    $nameother            = $name;
+                }
+
+                if ($request['title'] == 'canada') {
+                    $name                 = $files->getClientOriginalName();
+                    $name                 = "viaje-a-canada.jpg";
+
+                    $nameother            = $fileother->getClientOriginalName();
+                    $nameother            = $name;
+                }
+
+
+                //Storage::disk('sftp')->put('public_html/images/deptos/'.$name.'', fopen($files, 'r+'));
+                //Storage::disk('sftp')->put('public_html/images/deptos/responsive/'.$filenametostoreother.'', fopen($fileother, 'r+'));
+
+                Storage::disk('sftp')->put('public_html/test/' . $name . '', fopen($files, 'r+'));
+                Storage::disk('sftp')->put('public_html/test/responsive/' . $nameother . '', fopen($fileother, 'r+'));
+            }*/
         }
+    } else {
+        return "Campos invalidos";
+    }
+
+
+
         //Mega Ofertas
-        elseif ($request['type'] == 4) {
+     /*   elseif ($request['type'] == 4) {
             if ($request->hasFile('upload_image')) {
                 foreach ($request->file('upload_image') as $filemega) {
                     $namemega = $filemega->getClientOriginalName();
                     Storage::disk('sftp')->put('public_html/images/destinos/home/megaofertas/' . $namemega . '', fopen($filemega, 'r+'));
                 }
             }
-        } 
+        }
         //Recomendados, aparece en cada MT
         elseif ($request['type'] == 11) {
             if ($request->hasFile('upload_image')) {
@@ -96,7 +178,7 @@ class FilesController extends Controller
                     Storage::disk('sftp')->put('public_html/images/recommend/' . $namerec . '', fopen($filesrec, 'r+'));
                 }
             }
-        } 
+        }
         //Imagen en listado de cada departamento
         elseif ($request['type'] == 7) {
             if ($request->hasFile('upload_image') || $request->hasFile('uploadsmall')) {
@@ -124,7 +206,7 @@ class FilesController extends Controller
                 'size'        => $sync_size[2],
                 'type'        => $sync_type[2],
             ]);
-        } 
+        }
         //Slider principal Home
         elseif ($request['type'] == 8) {
             if ($request->hasFile('upload_image') || $request->hasFile('uploadsmall')) {
@@ -152,7 +234,7 @@ class FilesController extends Controller
                 'size'        => $sync_size[2],
                 'type'        => $sync_type[2],
             ]);
-        }
+        }*/
 
         return redirect()->route('file.index')->with('info', 'Imagen cargada');
     }

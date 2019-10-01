@@ -90,7 +90,38 @@
                     </div>
                 </div>
 
-                <div class="col-md-12">
+                <div class=" col-md-6">
+                    <div class="form-group">
+                        {!! Form::select('title', [null => 'Seleccione un Destino'] +
+                        [
+                        'europa' => 'Europa',
+                        'canada' => 'Canadá',
+                        'usa' => 'Estados Unidos',
+                        'mexico' => 'México',
+                        'sudamerica' => 'Sudamérica',
+                        'camerica' => 'Centroamerica',
+                        'caribe' => 'Caribe',
+                        'pacifico' => 'Pacifico',
+                        'moriente' => 'Medio Oriente',
+                        'asia' => 'Asia',
+                        'africa' => 'Africa',
+                        'edeportivo' => 'Eventos Especiales',
+                        'cruceros' => 'Cruceros',
+                        'exoticos' => 'Exoticos',
+                        'jviajera' => 'Juventud Viajera',
+                        'gruposyfits' => 'Grupos y Fits',
+                        'lmiel' => 'Luna de Miel',
+                        'quinceaneras' => 'Quinceañeras',
+                        'desdecancun' => 'Desde Cancún',
+
+
+                        'navidadyfinanio' => 'Navidad y Fin de Año',
+
+                        ],null, ['class' => 'form-control input']) !!}
+                    </div>
+                </div>
+
+                <div class="col-md-6">
                     <div class="form-group">
                         {!! Form::select('type',['2' => 'Panoramica por destino (1918x300)',],null, ['class' => 'form-control input', 'readonly' => true]) !!}
                     </div>
@@ -111,6 +142,11 @@
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                {{ Form::text('mt', null, ['class' => 'form-control ']) }}                </div>
             </div>
             @elseif($var == 7)
             <div class="col-md-6">
@@ -282,7 +318,7 @@
 
                 <div class=" col-md-12">
                     <div class="form-group">
-                    {!! Form::select('title',['main-slider' => 'Slider principal',],null, ['class' => 'form-control input', 'readonly' => true]) !!}
+                        {!! Form::select('title',['main-slider' => 'Slider principal',],null, ['class' => 'form-control input', 'readonly' => true]) !!}
                     </div>
                 </div>
 
@@ -334,7 +370,7 @@
 
                 <div class=" col-md-12">
                     <div class="form-group">
-                    {!! Form::select('titleother',['main-responsive' => 'Slider responsive',],null, ['class' => 'form-control input', 'readonly' => true]) !!}
+                        {!! Form::select('titleother',['main-responsive' => 'Slider responsive',],null, ['class' => 'form-control input', 'readonly' => true]) !!}
                     </div>
                 </div>
 
@@ -398,7 +434,7 @@
                     {!! Form::select('type',['4' => 'Mega Ofertas',],null, ['class' => 'form-control input', 'readonly' => true]) !!}
                 </div>
             </div>
-            
+
             @elseif($var == 11)
             <div class="col-md-4">
                 <div class="form-group">
