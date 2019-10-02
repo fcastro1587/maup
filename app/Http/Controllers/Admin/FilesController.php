@@ -7,6 +7,7 @@ use App\Http\Requests\FileStoreRequest;
 use File;
 use App\Travel;
 use App\Multimedia;
+use App\SeasonTravel;
 use App\Header;
 use App\Country;
 use App\City;
@@ -53,10 +54,29 @@ class FilesController extends Controller
 
     public function createupload($var)
     {
-        $countries = Country::orderby('name_country', 'asc')->pluck('name_country', 'code_iata');
-        $cities    = City::orderby('name', 'asc')->pluck('name', 'id');
+        $countries = Country::orderby('name_country', 'asc')
+            ->pluck('name_country', 'code_iata');
 
-        return view('admin.images.createupload', compact('countries', 'cities', 'var'));
+        $cities    = City::orderby('name', 'asc')
+            ->pluck('name', 'id');
+
+        $season = SeasonTravel::where('season_code_season', 'PRO')->where('home', 1)->paginate();
+
+        return view('admin.images.createupload', compact('countries', 'cities', 'var', 'season'));
+    }
+
+    public function destruirmt(Request $request, $id)
+    {
+        if ($request->ajax()) {
+            $product = SeasonTravel::FindOrFail($id);
+            $product->delete();
+            $products_total = SeasonTravel::all()->count();
+
+            return response()->json([
+                'total'   => $products_total,
+                'message' => $product->id."fue eliminado",
+            ]);
+        }
     }
 
     public function store(FileStoreRequest $request)
@@ -98,8 +118,9 @@ class FilesController extends Controller
 
 
 
-        if (isset($clv)) {
-            if ($tipo == 2) {
+
+        if ($tipo == 2) {
+            if (isset($clv)) {
                 Header::where('header_department', $destino)->delete();
                 $viaje         = Travel::where('mt', '=', $clv)->first();
 
@@ -617,13 +638,25 @@ class FilesController extends Controller
         }
         //Mega Ofertas
         elseif ($tipo == 4) {
-dd($request->all());
-            /*if ($request->hasFile('upload_image')) {
+            if ($request->hasFile('upload_image')) {
                 foreach ($request->file('upload_image') as $filemega) {
                     $namemega = $filemega->getClientOriginalName();
                     Storage::disk('sftp')->put('public_html/images/destinos/home/megaofertas/' . $namemega . '', fopen($filemega, 'r+'));
                 }
-            }*/
+            }
+
+            if (isset($clv)) {
+                foreach ($clv as $mt) {
+                    $viaje         = Travel::where('mt', '=', $mt)->first();
+                    SeasonTravel::create([
+                        'travel_mt'          => $viaje->mt,
+                        'season_code_season' => 'PRO',
+                        'home'               => '1',
+                        'orden_item'         =>  $request['orden'],
+                        'active_item'        => '1',
+                    ]);
+                }
+            }
         }
 
 
@@ -713,7 +746,7 @@ dd($request->all());
         //
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         //
     }

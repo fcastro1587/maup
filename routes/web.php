@@ -68,7 +68,8 @@ Route::get('select/dataremote',       'Admin\HomeController@img')->name('img.img
 Route::get('offers/dataoffer',        'Admin\OffersController@dataoffer')->name('dataoffer.dataoffer');
 Route::get('city/datacity',           'Admin\CityController@datacity')->name('datacity.datacity');
 
-
+//ajax delete file
+Route::DELETE('file/delete/megaofertas/{id}',        'Admin\FilesController@destruirmt')->name('destruirmt');
 
 //envio de tipo de cambio
 Route::post('admintc/sendtc', 'Admin\AdminTController@FormTC')->name('FormTC.send');

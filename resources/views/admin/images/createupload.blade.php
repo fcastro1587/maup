@@ -66,6 +66,26 @@
         border: solid 1px rgba(0, 0, 0, .4);
         border-radius: 10px;
     }
+
+    #div_1 input[type='file'],
+    #div_1 input[type='text'],
+    #div_1 input[type='button'] {
+        display: block;
+        float: left;
+    }
+
+    #div_1 input[type='file'] {
+        width: 70%;
+    }
+
+    #div_1 input[type="text"] {
+        width: 18%;
+        margin-right: 2%;
+    }
+
+    #div_1 input[type="button"] {
+        width: 10%;
+    }
 </style>
 
 <div class="row">
@@ -73,7 +93,7 @@
         <div class="col-md-12">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <h4>Todos los campos son obligatorios</h4>
+                    <h4>* Todos los campos son obligatorios</h4>
                 </div>
             </div>
         </div>
@@ -415,41 +435,56 @@
                     </div>
                 </div>
             </div>
-          <!--@else
-            <div class="col-md-6">
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-btn">
-                            <span class="btn btn-success btn-file">
-                                Image…
-                                {!! Form::file('upload_image[]', ['id' => 'imgInp', 'multiple' => true]) !!}
-                            </span>
-                        </span>
-                        {{ Form::text('name', null, ['class' => 'form-control file', 'id' => 'urlname', 'readonly' => 'true']) }}
-                        <span class="input-group-btn">
-                            <span id="clear" class="btn btn-info">Limpiar</span>
-                        </span>
-                        </span>
-                    </div>
-                    <div class="file-preview">
-                        <img id='img-upload' />
-                    </div>
-                </div>
-            </div>-->
             @endif
 
 
             @if($var == 4)
+            <span id="products-total">{{$season->total()}}</span>
+            <div id="alert" class="alert alert-info"></div>
+            <table class="table table-hover table-striped">
+                <thead>
+                    <tr>
+                        <th>id</th>
+                        <th>MT</th>
+                        <th>action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($season as $seas)
+                    <tr>
+                        <td>{{$seas->id}}</td>
+                        <td>{{$seas->season_code_season}}</td>
+                       <td>
+                       {!! Form::open(['route' => ['destruirmt', $seas->id], 'method' => 'DELETE']) !!}
+                        <a href="#">Eliminar {{$seas->id}}</a>
+                        {!! Form::close() !!}
+
+              
+                       </td>
+                   </tr>
+                    @endforeach
+
+                  
+                </tbody>
+            </table>
+
 
             <div class="col-md-12">
                 <div class="form-group">
-                    <div id="div_1">
-                      cargar imagen  <input type="file" name="materiales[]" id="materiales1"/>
-                   
-                     <input type="text" name="cantidadmateriales[]"/>
-                        <input class="bt_plus" id="1" type="button" value="+" />
+                    <div id="div_1" style="margin-bottom:15px;overflow:hidden;">
+                        <input type="file" name="upload_image[]" id="upload_image1" style="display:block;float:left;width:40%;" />
+                        <input type="text" name="orden[]" placeholder="Orden" style="display:block;float:left;width:25%;margin-right:2.5%;padding:1%;border-radius:10px;border:solid 1px rgba(0,0,0,.2);" />
+                        <input type="text" name="mt[]" placeholder="MT" style="display:block;float:left;width:25%;margin-right:2.5%;padding:1%;border-radius:10px;border:solid 1px rgba(0,0,0,.2);" />
+                        <input class="bt_plus" id="1" type="button" value="+" style="display: block;float: left;width:5%;padding:1%;border-radius:10px;border:solid 1px rgba(0,0,0,.2);" />
                         <div class="error_form"></div>
+
                     </div>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="form-group">
+                    {!! Form::select('type',['4' => 'Mega Ofertas (320x400)',],null, ['class' => 'form-control input', 'readonly' => true]) !!}
                 </div>
             </div>
 
@@ -465,11 +500,11 @@
             <div class="col-md-12">
                 <div class="form-group">
                     {{ Form::submit('Upload', ['class' => 'btn btn-sm btn-success']) }}
-                </div>
-            </div>
-            {{ csrf_field() }}
-        </form>
     </div>
+</div>
+{{ csrf_field() }}
+</form>
+</div>
 </div>
 
 @section('script')
@@ -514,18 +549,19 @@
         $('#pais').select2();
         $('#ciudad').select2();
         $('.img2').select2();
-    });
 
-    $(document).ready(function() {
+
+        //AGREGAR VARIOS
         //ACA le asigno el evento click a cada boton de la clase bt_plus y llamo a la funcion agregar
         $(".bt_plus").each(function(el) {
             $(this).bind("click", agregar);
         });
     });
 
+
+
     function agregar() {
         // ID del elemento div quitandole la palabra "div_" de delante. Pasi asi poder aumentar el número. Esta parte no es necesaria pero yo la utilizaba ya que cada campo de mi formulario tenia un autosuggest , así que dejo como seria por si a alguien le hace falta.
-
         var clickID = parseInt($(this).parent('div').attr('id').replace('div_', ''));
 
         // Genero el nuevo numero id
@@ -538,13 +574,13 @@
         $newClone.attr("id", 'div_' + newID);
 
         //Asigno nuevo id al primer campo input dentro del div y le borro cualquier valor que tenga asi no copia lo ultimo que hayas escrito.(igual que antes no es necesario tener un id)
-        $newClone.children("input").eq(0).attr("id", 'materiales' + newID).val('');
+        $newClone.children("input").eq(0).attr("id", 'upload_image' + newID).val('');
 
         //Borro el valor del segundo campo input(este caso es el campo de cantidad)
         $newClone.children("input").eq(1).val('');
 
         //Asigno nuevo id al boton
-        $newClone.children("input").eq(2).attr("id", newID)
+        $newClone.children("input").eq(3).attr("id", newID)
 
         //Inserto el div clonado y modificado despues del div original
         $newClone.insertAfter($('#div_' + clickID));
@@ -564,5 +600,31 @@
 </script>
 
 
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#alert').hide();
+        $('a').click(function(e) {
+            e.preventDefault();
+            if (!confirm("estas seguro de eliminar")) {
+                return false;
+            }
+
+            var row = $(this).parents('tr');
+            var form = $(this).parents('form');
+            var url = form.attr('action');
+
+            $('#alert').show();
+
+            $.post(url, form.serialize(), function(result) {
+                row.fadeOut();
+                $('#products-total').html(result.total);
+                $('#alert').html(result.message);
+            }).fail(function() {
+                $('#alert').html('Algo salio mal');
+            });
+        });
+    });
+</script>
 @endsection
 @endsection
