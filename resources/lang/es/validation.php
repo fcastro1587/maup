@@ -144,6 +144,9 @@ return [
         'itinerary'             => 'itinerario',
         'price_table'           => 'tabla de precios',
         'anio'                  => 'año',
-        'code_issu'             => 'Codigo issu'
+        'code_issu'             => 'Codigo issu',
+        'uploadsmall'           => 'Imagen responsive',
+        'upload_image'          => 'Imagen principal',
+        'mt'                    => 'MT'
     ],
 ];

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\FileStoreRequest;
 use File;
 use App\Travel;
 use App\Multimedia;
@@ -58,15 +59,20 @@ class FilesController extends Controller
         return view('admin.images.createupload', compact('countries', 'cities', 'var'));
     }
 
-    public function store(Request $request)
+    public function store(FileStoreRequest $request)
     {
 
-
+        //variables  
         $clv        = $request['mt'];
         $destino    = $request['title'];
+        $tipo       = $request['type'];
 
-        $files      = $request->file('upload_image');
+
+        //imagenes
+        $file       = $request->file('upload_image');
         $fileother  = $request->file('uploadsmall');
+
+
 
         //array para 7(listado por depto) y 8(slide rprincipal)
         if ($request['name'])              $sync_name[1]    = $request['name'];
@@ -91,85 +97,537 @@ class FilesController extends Controller
         if ($request['typeother'])         $sync_type[2]    = $request['typeother'];
 
 
-        if (isset($request['mt']) || isset($request['title'])) {
 
-        if ($request['type'] == 2) {  //Panoramica por departamento
-            
-            Header::where('header_department', $request['title'])->delete(); //borra los datos  de la tabla para ingresra uno nuevo
+        if (isset($clv)) {
+            if ($tipo == 2) {
+                Header::where('header_department', $destino)->delete();
+                $viaje         = Travel::where('mt', '=', $clv)->first();
 
-                $viaje         = Travel::where('mt', '=', $request['mt'])->first();
-
-                if ($viaje != null) {
-                    Header::create([
-                        'header_mt'          => $request['mt'],
-                        'header_department'  => $request['title'],
-                        'img'                => '2545',
-                        'order'              => '1',
-                        'active_head'        => '1',
-                    ]);
-                } elseif ($viaje == null) {
-
-                    $blq = $this->get_data('https://www.megatravel.com.mx/tester/detail/12059');
-                    $blq = json_decode($blq, true);
-
-                    if (isset($blq['code'])) {
-                        return "MT Inactivo";
-                    } else {
+                if ($destino == 'europa') {
+                    if ($viaje != null) {
                         Header::create([
-                            'bloqueo_mt'         => $request['mt'],
-                            'header_department'  => $request['title'],
-                            'img'                => '2545',
+                            'header_mt'          => $clv,
+                            'header_department'  => $destino,
+                            'img'                => '3105',
                             'order'              => '1',
                             'active_head'        => '1',
                         ]);
+                    } elseif ($viaje == null) {
+                        $blq = $this->get_data('https://www.megatravel.com.mx/tester/detail/' . $clv);
+                        $blq = json_decode($blq, true);
+                        if (isset($blq['code'])) {
+                            return "MT Inactivo";
+                        } else {
+                            Header::create([
+                                'bloqueo_mt'         => $clv,
+                                'header_department'  => $destino,
+                                'img'                => '3105',
+                                'order'              => '1',
+                                'active_head'        => '1',
+                            ]);
+                        }
                     }
-                }
-
-
-            //dd($request->all());
-            /* if ($request->hasFile('upload_image') || $request->hasFile('uploadsmall')) {
-                $files                = $request->file('upload_image');
-                $fileother            = $request->file('uploadsmall');
-
-                if ($request['title'] == 'europa') {
-                    $name                 = $files->getClientOriginalName();
+                    $name                 = $file->getClientOriginalName();
                     $name                 = "viaje-a-europa.jpg";
-
                     $nameother            = $fileother->getClientOriginalName();
                     $nameother            = $name;
-                }
-
-                if ($request['title'] == 'canada') {
-                    $name                 = $files->getClientOriginalName();
+                } elseif ($destino == 'canada') {
+                    if ($viaje != null) {
+                        Header::create([
+                            'header_mt'          => $clv,
+                            'header_department'  => $destino,
+                            'img'                => '2553',
+                            'order'              => '1',
+                            'active_head'        => '1',
+                        ]);
+                    } elseif ($viaje == null) {
+                        $blq = $this->get_data('https://www.megatravel.com.mx/tester/detail/' . $clv);
+                        $blq = json_decode($blq, true);
+                        if (isset($blq['code'])) {
+                            return "MT Inactivo";
+                        } else {
+                            Header::create([
+                                'bloqueo_mt'         => $clv,
+                                'header_department'  => $destino,
+                                'img'                => '2553',
+                                'order'              => '1',
+                                'active_head'        => '1',
+                            ]);
+                        }
+                    }
+                    $name                 = $file->getClientOriginalName();
                     $name                 = "viaje-a-canada.jpg";
-
+                    $nameother            = $fileother->getClientOriginalName();
+                    $nameother            = $name;
+                } elseif ($destino == 'usa') {
+                    if ($viaje != null) {
+                        Header::create([
+                            'header_mt'          => $clv,
+                            'header_department'  => $destino,
+                            'img'                => '2560',
+                            'order'              => '1',
+                            'active_head'        => '1',
+                        ]);
+                    } elseif ($viaje == null) {
+                        $blq = $this->get_data('https://www.megatravel.com.mx/tester/detail/' . $clv);
+                        $blq = json_decode($blq, true);
+                        if (isset($blq['code'])) {
+                            return "MT Inactivo";
+                        } else {
+                            Header::create([
+                                'bloqueo_mt'         => $clv,
+                                'header_department'  => $destino,
+                                'img'                => '2560',
+                                'order'              => '1',
+                                'active_head'        => '1',
+                            ]);
+                        }
+                    }
+                    $name                 = $file->getClientOriginalName();
+                    $name                 = "viajes-a-estados-unidos.jpg";
+                    $nameother            = $fileother->getClientOriginalName();
+                    $nameother            = $name;
+                } elseif ($destino == 'mexico') {
+                    if ($viaje != null) {
+                        Header::create([
+                            'header_mt'          => $clv,
+                            'header_department'  => $destino,
+                            'img'                => '2547',
+                            'order'              => '1',
+                            'active_head'        => '1',
+                        ]);
+                    } elseif ($viaje == null) {
+                        $blq = $this->get_data('https://www.megatravel.com.mx/tester/detail/' . $clv);
+                        $blq = json_decode($blq, true);
+                        if (isset($blq['code'])) {
+                            return "MT Inactivo";
+                        } else {
+                            Header::create([
+                                'bloqueo_mt'         => $clv,
+                                'header_department'  => $destino,
+                                'img'                => '2547',
+                                'order'              => '1',
+                                'active_head'        => '1',
+                            ]);
+                        }
+                    }
+                    $name                 = $file->getClientOriginalName();
+                    $name                 = "viajes-por-mexico.jpg";
+                    $nameother            = $fileother->getClientOriginalName();
+                    $nameother            = $name;
+                } elseif ($destino == 'sudamerica') {
+                    if ($viaje != null) {
+                        Header::create([
+                            'header_mt'          => $clv,
+                            'header_department'  => $destino,
+                            'img'                => '2556',
+                            'order'              => '1',
+                            'active_head'        => '1',
+                        ]);
+                    } elseif ($viaje == null) {
+                        $blq = $this->get_data('https://www.megatravel.com.mx/tester/detail/' . $clv);
+                        $blq = json_decode($blq, true);
+                        if (isset($blq['code'])) {
+                            return "MT Inactivo";
+                        } else {
+                            Header::create([
+                                'bloqueo_mt'         => $clv,
+                                'header_department'  => $destino,
+                                'img'                => '2556',
+                                'order'              => '1',
+                                'active_head'        => '1',
+                            ]);
+                        }
+                    }
+                    $name                 = $file->getClientOriginalName();
+                    $name                 = "viajes-a-sudamerica.jpg";
+                    $nameother            = $fileother->getClientOriginalName();
+                    $nameother            = $name;
+                } elseif ($destino == 'camerica') {
+                    if ($viaje != null) {
+                        Header::create([
+                            'header_mt'          => $clv,
+                            'header_department'  => $destino,
+                            'img'                => '1713',
+                            'order'              => '1',
+                            'active_head'        => '1',
+                        ]);
+                    } elseif ($viaje == null) {
+                        $blq = $this->get_data('https://www.megatravel.com.mx/tester/detail/' . $clv);
+                        $blq = json_decode($blq, true);
+                        if (isset($blq['code'])) {
+                            return "MT Inactivo";
+                        } else {
+                            Header::create([
+                                'bloqueo_mt'         => $clv,
+                                'header_department'  => $destino,
+                                'img'                => '1713',
+                                'order'              => '1',
+                                'active_head'        => '1',
+                            ]);
+                        }
+                    }
+                    $name                 = $file->getClientOriginalName();
+                    $name                 = "viajes-a-centroamerica.jpg";
+                    $nameother            = $fileother->getClientOriginalName();
+                    $nameother            = $name;
+                } elseif ($destino == 'caribe') {
+                    if ($viaje != null) {
+                        Header::create([
+                            'header_mt'          => $clv,
+                            'header_department'  => $destino,
+                            'img'                => '1343',
+                            'order'              => '1',
+                            'active_head'        => '1',
+                        ]);
+                    } elseif ($viaje == null) {
+                        $blq = $this->get_data('https://www.megatravel.com.mx/tester/detail/' . $clv);
+                        $blq = json_decode($blq, true);
+                        if (isset($blq['code'])) {
+                            return "MT Inactivo";
+                        } else {
+                            Header::create([
+                                'bloqueo_mt'         => $clv,
+                                'header_department'  => $destino,
+                                'img'                => '1343',
+                                'order'              => '1',
+                                'active_head'        => '1',
+                            ]);
+                        }
+                    }
+                    $name                 = $file->getClientOriginalName();
+                    $name                 = "viajes-al-caribe.jpg";
+                    $nameother            = $fileother->getClientOriginalName();
+                    $nameother            = $name;
+                } elseif ($destino == 'pacifico') {
+                    if ($viaje != null) {
+                        Header::create([
+                            'header_mt'          => $clv,
+                            'header_department'  => $destino,
+                            'img'                => '916',
+                            'order'              => '1',
+                            'active_head'        => '1',
+                        ]);
+                    } elseif ($viaje == null) {
+                        $blq = $this->get_data('https://www.megatravel.com.mx/tester/detail/' . $clv);
+                        $blq = json_decode($blq, true);
+                        if (isset($blq['code'])) {
+                            return "MT Inactivo";
+                        } else {
+                            Header::create([
+                                'bloqueo_mt'         => $clv,
+                                'header_department'  => $destino,
+                                'img'                => '916',
+                                'order'              => '1',
+                                'active_head'        => '1',
+                            ]);
+                        }
+                    }
+                    $name                 = $file->getClientOriginalName();
+                    $name                 = "viajes-por-el-pacifico.jpg";
+                    $nameother            = $fileother->getClientOriginalName();
+                    $nameother            = $name;
+                } elseif ($destino == 'moriente') {
+                    if ($viaje != null) {
+                        Header::create([
+                            'header_mt'          => $clv,
+                            'header_department'  => $destino,
+                            'img'                => '2670',
+                            'order'              => '1',
+                            'active_head'        => '1',
+                        ]);
+                    } elseif ($viaje == null) {
+                        $blq = $this->get_data('https://www.megatravel.com.mx/tester/detail/' . $clv);
+                        $blq = json_decode($blq, true);
+                        if (isset($blq['code'])) {
+                            return "MT Inactivo";
+                        } else {
+                            Header::create([
+                                'bloqueo_mt'         => $clv,
+                                'header_department'  => $destino,
+                                'img'                => '2670',
+                                'order'              => '1',
+                                'active_head'        => '1',
+                            ]);
+                        }
+                    }
+                    $name                 = $file->getClientOriginalName();
+                    $name                 = "viajes-a-medio-oriente.jpg";
+                    $nameother            = $fileother->getClientOriginalName();
+                    $nameother            = $name;
+                } elseif ($destino == 'asia') {
+                    if ($viaje != null) {
+                        Header::create([
+                            'header_mt'          => $clv,
+                            'header_department'  => $destino,
+                            'img'                => '3132',
+                            'order'              => '1',
+                            'active_head'        => '1',
+                        ]);
+                    } elseif ($viaje == null) {
+                        $blq = $this->get_data('https://www.megatravel.com.mx/tester/detail/' . $clv);
+                        $blq = json_decode($blq, true);
+                        if (isset($blq['code'])) {
+                            return "MT Inactivo";
+                        } else {
+                            Header::create([
+                                'bloqueo_mt'         => $clv,
+                                'header_department'  => $destino,
+                                'img'                => '3132',
+                                'order'              => '1',
+                                'active_head'        => '1',
+                            ]);
+                        }
+                    }
+                    $name                 = $file->getClientOriginalName();
+                    $name                 = "viajes-por-asia.jpg";
+                    $nameother            = $fileother->getClientOriginalName();
+                    $nameother            = $name;
+                } elseif ($destino == 'africa') {
+                    if ($viaje != null) {
+                        Header::create([
+                            'header_mt'          => $clv,
+                            'header_department'  => $destino,
+                            'img'                => '2555',
+                            'order'              => '1',
+                            'active_head'        => '1',
+                        ]);
+                    } elseif ($viaje == null) {
+                        $blq = $this->get_data('https://www.megatravel.com.mx/tester/detail/' . $clv);
+                        $blq = json_decode($blq, true);
+                        if (isset($blq['code'])) {
+                            return "MT Inactivo";
+                        } else {
+                            Header::create([
+                                'bloqueo_mt'         => $clv,
+                                'header_department'  => $destino,
+                                'img'                => '2555',
+                                'order'              => '1',
+                                'active_head'        => '1',
+                            ]);
+                        }
+                    }
+                    $name                 = $file->getClientOriginalName();
+                    $name                 = "viajes-por-africa.jpg";
+                    $nameother            = $fileother->getClientOriginalName();
+                    $nameother            = $name;
+                } elseif ($destino == 'edeportivo') {
+                    if ($viaje != null) {
+                        Header::create([
+                            'header_mt'          => $clv,
+                            'header_department'  => $destino,
+                            'img'                => '3067',
+                            'order'              => '1',
+                            'active_head'        => '1',
+                        ]);
+                    } elseif ($viaje == null) {
+                        $blq = $this->get_data('https://www.megatravel.com.mx/tester/detail/' . $clv);
+                        $blq = json_decode($blq, true);
+                        if (isset($blq['code'])) {
+                            return "MT Inactivo";
+                        } else {
+                            Header::create([
+                                'bloqueo_mt'         => $clv,
+                                'header_department'  => $destino,
+                                'img'                => '3067',
+                                'order'              => '1',
+                                'active_head'        => '1',
+                            ]);
+                        }
+                    }
+                    $name                 = $file->getClientOriginalName();
+                    $name                 = "viajes-a-eventos-especiales.jpg";
+                    $nameother            = $fileother->getClientOriginalName();
+                    $nameother            = $name;
+                } elseif ($destino == 'cruceros') {
+                    if ($viaje != null) {
+                        Header::create([
+                            'header_mt'          => $clv,
+                            'header_department'  => $destino,
+                            'img'                => '2542',
+                            'order'              => '1',
+                            'active_head'        => '1',
+                        ]);
+                    } elseif ($viaje == null) {
+                        $blq = $this->get_data('https://www.megatravel.com.mx/tester/detail/' . $clv);
+                        $blq = json_decode($blq, true);
+                        if (isset($blq['code'])) {
+                            return "MT Inactivo";
+                        } else {
+                            Header::create([
+                                'bloqueo_mt'         => $clv,
+                                'header_department'  => $destino,
+                                'img'                => '2542',
+                                'order'              => '1',
+                                'active_head'        => '1',
+                            ]);
+                        }
+                    }
+                    $name                 = $file->getClientOriginalName();
+                    $name                 = "cruceros.jpg";
+                    $nameother            = $fileother->getClientOriginalName();
+                    $nameother            = $name;
+                } elseif ($destino == 'exoticos') {
+                    if ($viaje != null) {
+                        Header::create([
+                            'header_mt'          => $clv,
+                            'header_department'  => $destino,
+                            'img'                => '3068',
+                            'order'              => '1',
+                            'active_head'        => '1',
+                        ]);
+                    } elseif ($viaje == null) {
+                        $blq = $this->get_data('https://www.megatravel.com.mx/tester/detail/' . $clv);
+                        $blq = json_decode($blq, true);
+                        if (isset($blq['code'])) {
+                            return "MT Inactivo";
+                        } else {
+                            Header::create([
+                                'bloqueo_mt'         => $clv,
+                                'header_department'  => $destino,
+                                'img'                => '3068',
+                                'order'              => '1',
+                                'active_head'        => '1',
+                            ]);
+                        }
+                    }
+                    $name                 = $file->getClientOriginalName();
+                    $name                 = "viajes-exoticos-y-a-la-medida.jpg";
+                    $nameother            = $fileother->getClientOriginalName();
+                    $nameother            = $name;
+                } elseif ($destino == 'jviajera') {
+                    if ($viaje != null) {
+                        Header::create([
+                            'header_mt'          => $clv,
+                            'header_department'  => $destino,
+                            'img'                => '2623',
+                            'order'              => '1',
+                            'active_head'        => '1',
+                        ]);
+                    } elseif ($viaje == null) {
+                        $blq = $this->get_data('https://www.megatravel.com.mx/tester/detail/' . $clv);
+                        $blq = json_decode($blq, true);
+                        if (isset($blq['code'])) {
+                            return "MT Inactivo";
+                        } else {
+                            Header::create([
+                                'bloqueo_mt'         => $clv,
+                                'header_department'  => $destino,
+                                'img'                => '2623',
+                                'order'              => '1',
+                                'active_head'        => '1',
+                            ]);
+                        }
+                    }
+                    $name                 = $file->getClientOriginalName();
+                    $name                 = "viajes-para-jovenes.jpg";
+                    $nameother            = $fileother->getClientOriginalName();
+                    $nameother            = $name;
+                } elseif ($destino == 'lmiel') {
+                    if ($viaje != null) {
+                        Header::create([
+                            'header_mt'          => $clv,
+                            'header_department'  => $destino,
+                            'img'                => '2550',
+                            'order'              => '1',
+                            'active_head'        => '1',
+                        ]);
+                    } elseif ($viaje == null) {
+                        $blq = $this->get_data('https://www.megatravel.com.mx/tester/detail/' . $clv);
+                        $blq = json_decode($blq, true);
+                        if (isset($blq['code'])) {
+                            return "MT Inactivo";
+                        } else {
+                            Header::create([
+                                'bloqueo_mt'         => $clv,
+                                'header_department'  => $destino,
+                                'img'                => '2550',
+                                'order'              => '1',
+                                'active_head'        => '1',
+                            ]);
+                        }
+                    }
+                    $name                 = $file->getClientOriginalName();
+                    $name                 = "viajes-de-luna-de-miel.jpg";
+                    $nameother            = $fileother->getClientOriginalName();
+                    $nameother            = $name;
+                } elseif ($destino == 'quinceaneras') {
+                    if ($viaje != null) {
+                        Header::create([
+                            'header_mt'          => $clv,
+                            'header_department'  => $destino,
+                            'img'                => '2765',
+                            'order'              => '1',
+                            'active_head'        => '1',
+                        ]);
+                    } elseif ($viaje == null) {
+                        $blq = $this->get_data('https://www.megatravel.com.mx/tester/detail/' . $clv);
+                        $blq = json_decode($blq, true);
+                        if (isset($blq['code'])) {
+                            return "MT Inactivo";
+                        } else {
+                            Header::create([
+                                'bloqueo_mt'         => $clv,
+                                'header_department'  => $destino,
+                                'img'                => '2765',
+                                'order'              => '1',
+                                'active_head'        => '1',
+                            ]);
+                        }
+                    }
+                    $name                 = $file->getClientOriginalName();
+                    $name                 = "viajes-para-quinceaneras.jpg";
+                    $nameother            = $fileother->getClientOriginalName();
+                    $nameother            = $name;
+                } elseif ($destino == 'desdecancun') {
+                    if ($viaje != null) {
+                        Header::create([
+                            'header_mt'          => $clv,
+                            'header_department'  => $destino,
+                            'img'                => '2945',
+                            'order'              => '1',
+                            'active_head'        => '1',
+                        ]);
+                    } elseif ($viaje == null) {
+                        $blq = $this->get_data('https://www.megatravel.com.mx/tester/detail/' . $clv);
+                        $blq = json_decode($blq, true);
+                        if (isset($blq['code'])) {
+                            return "MT Inactivo";
+                        } else {
+                            Header::create([
+                                'bloqueo_mt'         => $clv,
+                                'header_department'  => $destino,
+                                'img'                => '2945',
+                                'order'              => '1',
+                                'active_head'        => '1',
+                            ]);
+                        }
+                    }
+                    $name                 = $file->getClientOriginalName();
+                    $name                 = "viajes-con-salidas-desde-cancun.jpg";
                     $nameother            = $fileother->getClientOriginalName();
                     $nameother            = $name;
                 }
+                Storage::disk('sftp')->put('public_html/images/deptos' . $name . '', fopen($file, 'r+'));
+                Storage::disk('sftp')->put('public_html/images/deptos/responsive/' . $nameother . '', fopen($fileother, 'r+'));
 
-
-                //Storage::disk('sftp')->put('public_html/images/deptos/'.$name.'', fopen($files, 'r+'));
-                //Storage::disk('sftp')->put('public_html/images/deptos/responsive/'.$filenametostoreother.'', fopen($fileother, 'r+'));
-
-                Storage::disk('sftp')->put('public_html/test/' . $name . '', fopen($files, 'r+'));
-                Storage::disk('sftp')->put('public_html/test/responsive/' . $nameother . '', fopen($fileother, 'r+'));
-            }*/
+                //Storage::disk('sftp')->put('public_html/test/' . $name . '', fopen($file, 'r+'));
+                //Storage::disk('sftp')->put('public_html/test/responsive/' . $nameother . '', fopen($fileother, 'r+'));
+            }
         }
-    } else {
-        return "Campos invalidos";
-    }
-
-
-
         //Mega Ofertas
-     /*   elseif ($request['type'] == 4) {
-            if ($request->hasFile('upload_image')) {
+        elseif ($tipo == 4) {
+dd($request->all());
+            /*if ($request->hasFile('upload_image')) {
                 foreach ($request->file('upload_image') as $filemega) {
                     $namemega = $filemega->getClientOriginalName();
                     Storage::disk('sftp')->put('public_html/images/destinos/home/megaofertas/' . $namemega . '', fopen($filemega, 'r+'));
                 }
-            }
+            }*/
         }
+
+
+        /* 
         //Recomendados, aparece en cada MT
         elseif ($request['type'] == 11) {
             if ($request->hasFile('upload_image')) {
