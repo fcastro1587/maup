@@ -68,13 +68,19 @@ class FilesController extends Controller
     public function destruirmt(Request $request, $id)
     {
         if ($request->ajax()) {
-            $product = SeasonTravel::FindOrFail($id);
-            $product->delete();
-            $products_total = SeasonTravel::all()->count();
+            $category = SeasonTravel::find($id);
+            if (!is_null($category)) {
+                $category->delete();
+                return response()->json([
+                    'response'   => true,
+                    'id'         => $category->id,
+                    'message'    => 'eliminado correctamente',
+                ]);
+            }
 
             return response()->json([
-                'total'   => $products_total,
-                'message' => $product->id."fue eliminado",
+                'response'       => false,
+                'message'        => "ha ocurrido un error intente de nuevo",
             ]);
         }
     }

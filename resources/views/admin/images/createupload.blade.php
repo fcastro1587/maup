@@ -1,5 +1,5 @@
 @extends('adminlte::layouts.app')
-
+@include('admin.images.partials.modals')
 @section('main-content')
 <style>
     .btn-file {
@@ -441,34 +441,17 @@
             @if($var == 4)
             <span id="products-total">{{$season->total()}}</span>
             <div id="alert" class="alert alert-info"></div>
-            <table class="table table-hover table-striped">
-                <thead>
-                    <tr>
-                        <th>id</th>
-                        <th>MT</th>
-                        <th>action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($season as $seas)
-                    <tr>
-                        <td>{{$seas->id}}</td>
-                        <td>{{$seas->season_code_season}}</td>
-                       <td>
-                       {!! Form::open(['route' => ['destruirmt', $seas->id], 'method' => 'DELETE']) !!}
-                        <a href="#">Eliminar {{$seas->id}}</a>
-                        {!! Form::close() !!}
-
-              
-                       </td>
-                   </tr>
-                    @endforeach
-
-                  
-                </tbody>
-            </table>
-
-
+                    <div class="owl-carousel owl-theme">
+                        @foreach($season as $seas)
+                        <div class="item" data-id="{{$seas->id}}">
+                            <p>{{$seas->id}}</p>
+                            <p>{{$seas->season_code_season}}</p>
+                            <p>
+                            <a href="{{route('destruirmt', $seas->id)}}" class="btn btn-danger delete-record">Eliminar</a>
+                            </p>
+                        </div>
+                        @endforeach
+        
             <div class="col-md-12">
                 <div class="form-group">
                     <div id="div_1" style="margin-bottom:15px;overflow:hidden;">
@@ -500,11 +483,11 @@
             <div class="col-md-12">
                 <div class="form-group">
                     {{ Form::submit('Upload', ['class' => 'btn btn-sm btn-success']) }}
+                </div>
+            </div>
+            {{ csrf_field() }}
+        </form>
     </div>
-</div>
-{{ csrf_field() }}
-</form>
-</div>
 </div>
 
 @section('script')
@@ -604,26 +587,37 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $('#alert').hide();
-        $('a').click(function(e) {
-            e.preventDefault();
-            if (!confirm("estas seguro de eliminar")) {
-                return false;
-            }
+        $('.owl-carousel').on('click', 'a.delete-record', function() {
+            event.preventDefault();
+            $('#form-delete').attr('action', $(this).attr('href'));
+            $('#modal-delete').modal('show');
+        });
 
-            var row = $(this).parents('tr');
-            var form = $(this).parents('form');
-            var url = form.attr('action');
-
+        $('#yes-delete').on('click', function() {
+            //$('#modal-delete').modal('hide');
             $('#alert').show();
-
-            $.post(url, form.serialize(), function(result) {
-                row.fadeOut();
-                $('#products-total').html(result.total);
-                $('#alert').html(result.message);
-            }).fail(function() {
-                $('#alert').html('Algo salio mal');
+            $.ajax({
+                type: $('#form-delete').attr('method'),
+                url: $('#form-delete').attr('action'),
+                data: $('#form-delete').serialize(),
+                success: function(data) {
+                    if (data.response) {
+                        $('.owl-carousel .item').each(function() {
+                            if ($(this).data('id') == data.id) {
+                                $(this).fadeOut();
+                            }
+                        });
+                        $('#alert').html(data.message);
+                    } else {
+                        $('#alert-info').html(data.message);
+                    }
+                },
+                error: function(data) {
+                    $('#alert').html(data.message);
+                }
             });
         });
+
     });
 </script>
 @endsection
