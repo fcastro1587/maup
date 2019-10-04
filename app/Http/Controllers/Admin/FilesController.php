@@ -54,13 +54,18 @@ class FilesController extends Controller
 
     public function createupload($var)
     {
-        $countries = Country::orderby('name_country', 'asc')
-            ->pluck('name_country', 'code_iata');
+        $countries = Country::
+              orderby('name_country', 'asc')
+              ->pluck('name_country', 'code_iata');
 
-        $cities    = City::orderby('name', 'asc')
-            ->pluck('name', 'id');
+        $cities    = City::
+              orderby('name', 'asc')
+              ->pluck('name', 'id');
 
-        $season = SeasonTravel::where('season_code_season', 'PRO')->where('home', 1)->paginate();
+        $season = SeasonTravel::
+            where('season_code_season', 'PRO')
+            ->where('home', 1)
+            ->paginate();
 
         return view('admin.images.createupload', compact('countries', 'cities', 'var', 'season'));
     }

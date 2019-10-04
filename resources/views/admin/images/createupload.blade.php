@@ -1,6 +1,7 @@
 @extends('adminlte::layouts.app')
 @include('admin.images.partials.modals')
 @section('main-content')
+
 <style>
     .btn-file {
         position: relative;
@@ -87,6 +88,9 @@
         width: 10%;
     }
 </style>
+<link rel="stylesheet" href="https://owlcarousel2.github.io/OwlCarousel2/assets/owlcarousel/assets/owl.carousel.min.css">
+<link rel="stylesheet" href="https://owlcarousel2.github.io/OwlCarousel2/assets/owlcarousel/assets/owl.theme.default.min.css">
+
 
 <div class="row">
     <div class="col-md-12">
@@ -439,19 +443,28 @@
 
 
             @if($var == 4)
-            <span id="products-total">{{$season->total()}}</span>
+            <span>{{$season->total()}} registros</span>
             <div id="alert" class="alert alert-info"></div>
-                    <div class="owl-carousel owl-theme">
-                        @foreach($season as $seas)
-                        <div class="item" data-id="{{$seas->id}}">
-                            <p>{{$seas->id}}</p>
-                            <p>{{$seas->season_code_season}}</p>
-                            <p>
+            <div class="col-md-12">
+                <div class="owl-carousel owl-theme">
+                    @foreach($season as $seas)
+                    <div class="item" data-id="{{$seas->id}}">
+                        <p>@if(!empty($seas->travel_mt))
+                            MT: {{$seas->travel_mt}}
+                            @elseif(!empty($seas->bloqueo_mt))
+                            MT: {{$seas->bloqueo_mt}}
+                            @endif
+                        </p>
+                        <p><img width="50px" src="https://img3.mtmedia.com.mx/home/megaofertas/{{$seas->img1->name}}"></p>
+                        <p>ORDEN: {{$seas->order_item}}</p>
+                        <p>
                             <a href="{{route('destruirmt', $seas->id)}}" class="btn btn-danger delete-record">Eliminar</a>
-                            </p>
-                        </div>
-                        @endforeach
-        
+                        </p>
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+
             <div class="col-md-12">
                 <div class="form-group">
                     <div id="div_1" style="margin-bottom:15px;overflow:hidden;">
@@ -492,8 +505,12 @@
 
 @section('script')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
-<script>
+<script src="https://owlcarousel2.github.io/OwlCarousel2/assets/owlcarousel/owl.carousel.js"></script>
+
+<script type="text/javascript">
     $(document).ready(function() {
+
+        //visualizar imagen cuando se carga
         $(document).on('change', '.btn-file :file', function() {
             var input = $(this),
                 label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
@@ -529,19 +546,74 @@
             $('#urlname').val('');
         });
 
+        //select2
         $('#pais').select2();
         $('#ciudad').select2();
         $('.img2').select2();
 
+        //carousel
+        $('.owl-carousel').owlCarousel({
+            loop: true,
+            margin: 5,
+            responsiveClass: true,
+            responsive: {
+                0: {
+                    items: 4,
+                    nav: true
+                },
+                600: {
+                    items: 6,
+                    nav: false
+                },
+                1000: {
+                    items: 10,
+                    nav: true,
+                    loop: false,
+                    margin: 5
+                }
+            }
+        });
+
+        //modal eliminar
+        $('#alert').hide();
+        $('.owl-carousel').on('click', 'a.delete-record', function() {
+            event.preventDefault();
+            $('#form-delete').attr('action', $(this).attr('href'));
+            $('#modal-delete').modal('show');
+        });
+
+        $('#yes-delete').on('click', function() {
+            //$('#modal-delete').modal('hide');
+            $('#alert').show();
+            $.ajax({
+                type: $('#form-delete').attr('method'),
+                url: $('#form-delete').attr('action'),
+                data: $('#form-delete').serialize(),
+                success: function(data) {
+                    if (data.response) {
+                        $('.owl-carousel .item').each(function() {
+                            if ($(this).data('id') == data.id) {
+                                $(this).fadeOut();
+                            }
+                        });
+                        $('.alert').html(data.message);
+                    } else {
+                        $('.alert-info').html(data.message);
+                    }
+                },
+                error: function(data) {
+                    $('.alert').html(data.message);
+                }
+            });
+        });
 
         //AGREGAR VARIOS
         //ACA le asigno el evento click a cada boton de la clase bt_plus y llamo a la funcion agregar
         $(".bt_plus").each(function(el) {
             $(this).bind("click", agregar);
         });
+
     });
-
-
 
     function agregar() {
         // ID del elemento div quitandole la palabra "div_" de delante. Pasi asi poder aumentar el número. Esta parte no es necesaria pero yo la utilizaba ya que cada campo de mi formulario tenia un autosuggest , así que dejo como seria por si a alguien le hace falta.
@@ -582,43 +654,5 @@
     }
 </script>
 
-
-
-<script type="text/javascript">
-    $(document).ready(function() {
-        $('#alert').hide();
-        $('.owl-carousel').on('click', 'a.delete-record', function() {
-            event.preventDefault();
-            $('#form-delete').attr('action', $(this).attr('href'));
-            $('#modal-delete').modal('show');
-        });
-
-        $('#yes-delete').on('click', function() {
-            //$('#modal-delete').modal('hide');
-            $('#alert').show();
-            $.ajax({
-                type: $('#form-delete').attr('method'),
-                url: $('#form-delete').attr('action'),
-                data: $('#form-delete').serialize(),
-                success: function(data) {
-                    if (data.response) {
-                        $('.owl-carousel .item').each(function() {
-                            if ($(this).data('id') == data.id) {
-                                $(this).fadeOut();
-                            }
-                        });
-                        $('#alert').html(data.message);
-                    } else {
-                        $('#alert-info').html(data.message);
-                    }
-                },
-                error: function(data) {
-                    $('#alert').html(data.message);
-                }
-            });
-        });
-
-    });
-</script>
 @endsection
 @endsection
