@@ -7,9 +7,10 @@
       </div>
       <div class="modal-body">
         <p>¿Estás seguro de Eliminar éste registro?</p>
-        {!!Form::open(['id' => 'form-delete', 'method' => 'DELETE']) !!}
+        <form action="{{ route('files.store') }}" id="sample_form" class="form-horizontal" enctype="multipart/form-data" method="POST">
+        {{ csrf_field() }}
 
-        {!!Form::close()!!}
+        </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">No</button>

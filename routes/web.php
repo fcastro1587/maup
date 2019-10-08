@@ -58,6 +58,8 @@ Route::get('file/{var}/createfile',        'Admin\FileController@createfile')->n
 Route::get('files/{var}/createupload',     'Admin\FilesController@createupload')->name('files.createupload'); //solo subira archivos
 });
 
+Route::resource('ajax-crud', 'Admin\AjaxCrudController');
+
 //ajax datatables viaje
 Route::get('alert/datalert',          'Admin\HomeController@datalert')->name('datalert.datalert');
 Route::get('role/viaje',              'Admin\HomeController@viaje')->name('viaje.viaje');

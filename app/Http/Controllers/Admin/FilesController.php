@@ -11,6 +11,7 @@ use App\SeasonTravel;
 use App\Header;
 use App\Country;
 use App\City;
+use Validator;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 
@@ -87,7 +88,7 @@ class FilesController extends Controller
         }
     }
 
-    public function store(FileStoreRequest $request)
+    public function store(Request $request)
     {
 
         //variables  
@@ -646,17 +647,50 @@ class FilesController extends Controller
         }
         //Mega Ofertas
         elseif ($tipo == 4) {
-            $clv        = $request['mt'];
+            /*$clv        = $request['mt'];*/
+
+            $rules = array(
+                'upload_image' => 'required|upload_image|max:2048',
+                'orden'        => 'required',
+                'mt'           => 'required',
+
+            );
+
+            $error = Validator::make($request->all(), $rules);
+
+            if ($error->fails()) 
+            {
+                return response()->json(['errors' => $error->errors()->all()]);
+            }
+
+            $image = $request->file('upload_image');
+
+            $new_name = rand() . '.' .  $image->getClientOriginalExtension();
+
+            Storage::disk('sftp')->put('public_html/images/destinos/home/megaofertases/' . $new_name . '', fopen($filemega, 'r+'));
+
+            $form_data = array(
+                'travel_mt'   => $request->mt,
+                'order_item'  => $request->orden,
+            );
+
+            SeasonTravel::create($form_data);
+
+            return response()->json(['success' => 'Data Added successfully']);
 
 
-            if ($request->hasFile('upload_image')) {
+
+https://www.webslesson.info/2019/04/laravel-58-ajax-crud-tutorial-using-datatables.html
+
+
+            /*  if ($request->hasFile('upload_image')) {
                 foreach ($request->file('upload_image') as $filemega) {
                     $namemega = $filemega->getClientOriginalName();
                     Storage::disk('sftp')->put('public_html/images/destinos/home/megaofertases/' . $namemega . '', fopen($filemega, 'r+'));
                 }
-            }
+            }*/
 
-            if (isset($clv)) {
+            /*if (isset($clv)) {
 
                 foreach ($clv as $mt) {
                     $viaje         = Travel::where('mt', '=', $mt)
@@ -705,7 +739,7 @@ class FilesController extends Controller
                         }
                     }
                 }
-            }
+            }*/
         }
 
 
