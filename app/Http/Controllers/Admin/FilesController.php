@@ -54,16 +54,13 @@ class FilesController extends Controller
 
     public function createupload($var)
     {
-        $countries = Country::
-              orderby('name_country', 'asc')
-              ->pluck('name_country', 'code_iata');
+        $countries = Country::orderby('name_country', 'asc')
+            ->pluck('name_country', 'code_iata');
 
-        $cities    = City::
-              orderby('name', 'asc')
-              ->pluck('name', 'id');
+        $cities    = City::orderby('name', 'asc')
+            ->pluck('name', 'id');
 
-        $season = SeasonTravel::
-            where('season_code_season', 'PRO')
+        $season = SeasonTravel::where('season_code_season', 'PRO')
             ->where('home', 1)
             ->paginate();
 
@@ -649,23 +646,64 @@ class FilesController extends Controller
         }
         //Mega Ofertas
         elseif ($tipo == 4) {
+            $clv        = $request['mt'];
+
+
             if ($request->hasFile('upload_image')) {
                 foreach ($request->file('upload_image') as $filemega) {
                     $namemega = $filemega->getClientOriginalName();
-                    Storage::disk('sftp')->put('public_html/images/destinos/home/megaofertas/' . $namemega . '', fopen($filemega, 'r+'));
+                    Storage::disk('sftp')->put('public_html/images/destinos/home/megaofertases/' . $namemega . '', fopen($filemega, 'r+'));
                 }
             }
 
             if (isset($clv)) {
+
                 foreach ($clv as $mt) {
-                    $viaje         = Travel::where('mt', '=', $mt)->first();
-                    SeasonTravel::create([
-                        'travel_mt'          => $viaje->mt,
-                        'season_code_season' => 'PRO',
-                        'home'               => '1',
-                        'orden_item'         =>  $request['orden'],
-                        'active_item'        => '1',
-                    ]);
+                    $viaje         = Travel::where('mt', '=', $mt)
+                        ->first();
+
+
+
+                    if ($viaje != null) {
+
+                        $nameimg       = $request->file('upload_image');
+                        $nameimg       = $filemega->getClientOriginalName();
+                        $img       = Multimedia::where('name', $nameimg)
+                            ->where('type', 4)
+                            ->first();
+
+                            SeasonTravel::create([
+                                'travel_mt'          => $viaje->mt,
+                                'season_code_season' => 'PRO',
+                                'home'               => '1',
+                                'order_item'         => $request['orden'],
+                                'active_item'        => '1',
+                            ]);
+                    } elseif ($viaje == null) {
+                   
+                        $blq = $this->get_data('https://www.megatravel.com.mx/tester/detail/' . $clv);
+                     
+                        $blq = json_decode($blq, true);
+
+                        if (isset($blq['code'])) {
+                            return "MT Inactivo";
+                        } else {
+                            $nameimg       = $request->file('upload_image');
+                            $nameimg       = $filemega->getClientOriginalName();
+                            
+                            $img       = Multimedia::where('name', $nameimg)
+                                ->where('type', 4)
+                                ->first();
+
+
+                            SeasonTravel::create([
+                                'bloqueo_mt'          => $clv,
+                                'season_code_season' => 'PRO',
+                                'home'               => '1',
+                                'active_item'        => '1',
+                            ]);
+                        }
+                    }
                 }
             }
         }
