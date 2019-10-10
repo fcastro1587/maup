@@ -101,7 +101,7 @@
                 </div>
             </div>
         </div>
-        <!--<form action="{{ route('files.store') }}" enctype="multipart/form-data" method="POST">-->
+        <!--<form action="{{ route('files-ajax.store') }}" enctype="multipart/form-data" method="POST">-->
         @if($var == 2)
 
         <div class="col-md-6">
@@ -465,12 +465,6 @@
             </div>
         </div>
 
-        <div align="right">
-            <button tye="button" name="create_record" id="create_record" class="btn btn-success btn-sm">
-                Nuevo registro
-            </button>
-        </div>
-
         <!--  <div class="col-md-12">
                 <div class="form-group">
                     <div id="div_1" style="margin-bottom:15px;overflow:hidden;">
@@ -483,66 +477,51 @@
                     </div>
                 </div>
             </div>-->
+        <div align="right">
+            <button type="button" name="create_record" id="create_record" class="btn btn-success btn-sm">Create Record</button>
+        </div>
 
-
-        <div id="formModal" class="modal fade" tabindex="-1" role="dialog">
-            <div class="modal-dialog" role="document">
+        <div id="formModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">Modal title</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Add New Record</h4>
                     </div>
                     <div class="modal-body">
                         <span id="form_result"></span>
                         <form method="post" id="sample_form" class="form-horizontal" enctype="multipart/form-data">
-                            {{ csrf_field() }}
-
+                            @csrf
                             <div class="form-group">
-                                <label for="control-label col-md-4">Selecciona una imagen</label>
+                                <label class="control-label col-md-4">First Name : </label>
                                 <div class="col-md-8">
-                                    <input type="file" name="upload_image" id="upload_image" class="form-control">
+                                    <input type="text" name="first_name" id="first_name" class="form-control" />
                                 </div>
                             </div>
-
                             <div class="form-group">
-                                <label for="control-label col-md-4">Orden</label>
+                                <label class="control-label col-md-4">Last Name : </label>
                                 <div class="col-md-8">
-                                    <input type="text" name="orden" id="orden" class="form-control">
+                                    <input type="text" name="last_name" id="last_name" class="form-control" />
                                 </div>
                             </div>
-
                             <div class="form-group">
-                                <label for="control-label col-md-4">MT</label>
+                                <label class="control-label col-md-4">Select Profile Image : </label>
                                 <div class="col-md-8">
-                                    <input type="text" name="mt" id="mt" class="form-control">
+                                    <input type="file" name="image" id="image" />
+                                    <span id="store_image"></span>
                                 </div>
                             </div>
-
-
-
-                            <div class="form-group">
-                                <label for="control-label col-md-4">tipo</label>
-                                <div class="col-md-8">
-                                    {!! Form::select('type',['4' => 'Mega Ofertas (320x400)',],null, ['class' => 'form-control input', 'readonly' => true]) !!}
-
-                                </div>
-                            </div>
-
+                            <br />
                             <div class="form-group" align="center">
-                                <input type="hidden" name="hidden_id" id="hidden_id">
-                                <input type="submit" name="action_button" id="action_button" class="btn btn-warning" value="Add">
+                                <input type="hidden" name="action" id="action" />
+                                <input type="hidden" name="hidden_id" id="hidden_id" />
+                                <input type="submit" name="action_button" id="action_button" class="btn btn-warning" value="Add" />
                             </div>
-
                         </form>
                     </div>
-                    <!--<div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <input type="hidden" name="hidden_id" id="hidden_id">
-                        <input type="submit" name="action_button" id="action_button" class="btn btn-primary" value="Gurdar">
-                    </div>-->
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
-        </div><!-- /.modal -->
+                </div>
+            </div>
+        </div>
 
         <!-- <div class="col-md-12">
                 <div class="form-group">
@@ -578,189 +557,188 @@
 <script type="text/javascript">
     $(document).ready(function() {
 
-                //visualizar imagen cuando se carga
-                $(document).on('change', '.btn-file :file', function() {
-                    var input = $(this),
-                        label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
-                    input.trigger('fileselect', [label]);
-                });
+        //visualizar imagen cuando se carga
+        $(document).on('change', '.btn-file :file', function() {
+            var input = $(this),
+                label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+            input.trigger('fileselect', [label]);
+        });
 
-                $('.btn-file :file').on('fileselect', function(event, label) {
-                    var input = $(this).parents('.input-group').find(':text'),
-                        log = label;
-                    if (input.length) {
-                        input.val(log);
+        $('.btn-file :file').on('fileselect', function(event, label) {
+            var input = $(this).parents('.input-group').find(':text'),
+                log = label;
+            if (input.length) {
+                input.val(log);
+            } else {
+                if (log) alert(log);
+            }
+        });
+
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    $('#img-upload').attr('src', e.target.result);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $("#imgInp").change(function() {
+            readURL(this);
+        });
+
+        $("#clear").click(function() {
+            $('#img-upload').attr('src', '');
+            $('#urlname').val('');
+        });
+
+        //select2
+        $('#pais').select2();
+        $('#ciudad').select2();
+        $('.img2').select2();
+
+        //carousel
+        $('.owl-carousel').owlCarousel({
+            loop: true,
+            margin: 5,
+            responsiveClass: true,
+            responsive: {
+                0: {
+                    items: 4,
+                    nav: true
+                },
+                600: {
+                    items: 6,
+                    nav: false
+                },
+                1000: {
+                    items: 10,
+                    nav: true,
+                    loop: false,
+                    margin: 5
+                }
+            }
+        });
+
+        //modal eliminar
+        $('#alert').hide();
+        $('.owl-carousel').on('click', 'a.delete-record', function() {
+            event.preventDefault();
+            $('#form-delete').attr('action', $(this).attr('href'));
+            $('#modal-delete').modal('show');
+        });
+
+        $('#yes-delete').on('click', function() {
+            //$('#modal-delete').modal('hide');
+            $('#alert').show();
+            $.ajax({
+                type: $('#form-delete').attr('method'),
+                url: $('#form-delete').attr('action'),
+                data: $('#form-delete').serialize(),
+                success: function(data) {
+                    if (data.response) {
+                        $('.owl-carousel .item').each(function() {
+                            if ($(this).data('id') == data.id) {
+                                $(this).fadeOut();
+                            }
+                        });
+                        $('.alert').html(data.message);
                     } else {
-                        if (log) alert(log);
+                        $('.alert-info').html(data.message);
                     }
-                });
-
-                function readURL(input) {
-                    if (input.files && input.files[0]) {
-                        var reader = new FileReader();
-                        reader.onload = function(e) {
-                            $('#img-upload').attr('src', e.target.result);
-                        }
-                        reader.readAsDataURL(input.files[0]);
-                    }
+                },
+                error: function(data) {
+                    $('.alert').html(data.message);
                 }
+            });
+        });
 
-                $("#imgInp").change(function() {
-                    readURL(this);
-                });
+        //modal agregar
+        $('#create_record').click(function() {
+            $('.modal-title').text("Add New Record");
+            $('#action_button').val("Add");
+            $('#action').val("Add");
+            $('#formModal').modal('show');
+        });
 
-                $("#clear").click(function() {
-                    $('#img-upload').attr('src', '');
-                    $('#urlname').val('');
-                });
-
-                //select2
-                $('#pais').select2();
-                $('#ciudad').select2();
-                $('.img2').select2();
-
-                //carousel
-                $('.owl-carousel').owlCarousel({
-                    loop: true,
-                    margin: 5,
-                    responsiveClass: true,
-                    responsive: {
-                        0: {
-                            items: 4,
-                            nav: true
-                        },
-                        600: {
-                            items: 6,
-                            nav: false
-                        },
-                        1000: {
-                            items: 10,
-                            nav: true,
-                            loop: false,
-                            margin: 5
-                        }
-                    }
-                });
-
-                //modal eliminar
-                $('#alert').hide();
-                $('.owl-carousel').on('click', 'a.delete-record', function() {
-                    event.preventDefault();
-                    $('#form-delete').attr('action', $(this).attr('href'));
-                    $('#modal-delete').modal('show');
-                });
-
-                $('#yes-delete').on('click', function() {
-                    //$('#modal-delete').modal('hide');
-                    $('#alert').show();
-                    $.ajax({
-                        type: $('#form-delete').attr('method'),
-                        url: $('#form-delete').attr('action'),
-                        data: $('#form-delete').serialize(),
-                        success: function(data) {
-                            if (data.response) {
-                                $('.owl-carousel .item').each(function() {
-                                    if ($(this).data('id') == data.id) {
-                                        $(this).fadeOut();
-                                    }
-                                });
-                                $('.alert').html(data.message);
-                            } else {
-                                $('.alert-info').html(data.message);
+        $('#sample_form').on('submit', function(event) {
+            event.preventDefault();
+            if ($('#action').val() == 'Add') {
+                $.ajax({
+                    url: "{{ route('files-ajax.store') }}",
+                    method: "POST",
+                    data: new FormData(this),
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    dataType: "json",
+                    success: function(data) {
+                        var html = '';
+                        if (data.errors) {
+                            html = '<div class="alert alert-danger">';
+                            for (var count = 0; count < data.errors.length; count++) {
+                                html += '<p>' + data.errors[count] + '</p>';
                             }
-                        },
-                        error: function(data) {
-                            $('.alert').html(data.message);
+                            html += '</div>';
                         }
-                    });
-                });
-
-                //modal agregar
-                $('#create_record').click(function() {
-                    $('.modal-title').text("Agregar nueva imagen");
-                    $('#action_button').val("Add");
-                    $('#action').val("Add");
-                    $('#formModal').modal('show');
-                });
-
-
-
-                $('#sample_form').on('submit', function(event) {
-                    event.preventDefault();
-                    if ($('#action').val() == 'Add') {
-                        $.ajax({
-                            url: "{{ route('files.store') }}",
-                            method: "POST",
-                            data: new FormData(this),
-                            contentType: false,
-                            cache: false,
-                            processData: false,
-                            dataType: "json",
-                            success: function(data) {
-                                var html = '';
-                                if (data.errors) {
-                                    html = '<div class="alert alert-danger">';
-                                    for (var count = 0; count < data.errors.length; count++) {
-                                        html += '<p>' + data.errors[count] + '</p>';
-                                    }
-                                    html += '</div>';
-                                }
-                                if (data.success) {
-                                    html = '<div class="alert alert-success">' + data.success + '</div>';
-                                    $('#sample_form')[0].reset();
-                                    $('#user_table').DataTable().ajax.reload();
-                                }
-                                $('#form_result').html(html);
-                            }
-                        })
+                        if (data.success) {
+                            html = '<div class="alert alert-success">' + data.success + '</div>';
+                            $('#sample_form')[0].reset();
+                            $('#user_table').DataTable().ajax.reload();
+                        }
+                        $('#form_result').html(html);
                     }
-                });
+                })
+            }
 
-                    //AGREGAR VARIOS
-                    //ACA le asigno el evento click a cada boton de la clase bt_plus y llamo a la funcion agregar
-                    $(".bt_plus").each(function(el) {
-                        $(this).bind("click", agregar);
-                    });
+        });
 
-                });
+        //AGREGAR VARIOS
+        //ACA le asigno el evento click a cada boton de la clase bt_plus y llamo a la funcion agregar
+        $(".bt_plus").each(function(el) {
+            $(this).bind("click", agregar);
+        });
 
-                function agregar() {
-                    // ID del elemento div quitandole la palabra "div_" de delante. Pasi asi poder aumentar el número. Esta parte no es necesaria pero yo la utilizaba ya que cada campo de mi formulario tenia un autosuggest , así que dejo como seria por si a alguien le hace falta.
-                    var clickID = parseInt($(this).parent('div').attr('id').replace('div_', ''));
+    });
 
-                    // Genero el nuevo numero id
-                    var newID = (clickID + 1);
+    function agregar() {
+        // ID del elemento div quitandole la palabra "div_" de delante. Pasi asi poder aumentar el número. Esta parte no es necesaria pero yo la utilizaba ya que cada campo de mi formulario tenia un autosuggest , así que dejo como seria por si a alguien le hace falta.
+        var clickID = parseInt($(this).parent('div').attr('id').replace('div_', ''));
 
-                    // Creo un clon del elemento div que contiene los campos de texto
-                    $newClone = $('#div_' + clickID).clone(true);
+        // Genero el nuevo numero id
+        var newID = (clickID + 1);
 
-                    //Le asigno el nuevo numero id
-                    $newClone.attr("id", 'div_' + newID);
+        // Creo un clon del elemento div que contiene los campos de texto
+        $newClone = $('#div_' + clickID).clone(true);
 
-                    //Asigno nuevo id al primer campo input dentro del div y le borro cualquier valor que tenga asi no copia lo ultimo que hayas escrito.(igual que antes no es necesario tener un id)
-                    $newClone.children("input").eq(0).attr("id", 'upload_image' + newID).val('');
+        //Le asigno el nuevo numero id
+        $newClone.attr("id", 'div_' + newID);
 
-                    //Borro el valor del segundo campo input(este caso es el campo de cantidad)
-                    $newClone.children("input").eq(1).val('');
+        //Asigno nuevo id al primer campo input dentro del div y le borro cualquier valor que tenga asi no copia lo ultimo que hayas escrito.(igual que antes no es necesario tener un id)
+        $newClone.children("input").eq(0).attr("id", 'upload_image' + newID).val('');
 
-                    //Asigno nuevo id al boton
-                    $newClone.children("input").eq(3).attr("id", newID)
+        //Borro el valor del segundo campo input(este caso es el campo de cantidad)
+        $newClone.children("input").eq(1).val('');
 
-                    //Inserto el div clonado y modificado despues del div original
-                    $newClone.insertAfter($('#div_' + clickID));
+        //Asigno nuevo id al boton
+        $newClone.children("input").eq(3).attr("id", newID)
 
-                    //Cambio el signo "+" por el signo "-" y le quito el evento agregar
-                    $("#" + clickID).val('-').unbind("click", agregar);
+        //Inserto el div clonado y modificado despues del div original
+        $newClone.insertAfter($('#div_' + clickID));
 
-                    //Ahora le asigno el evento delRow para que borre la fial en caso de hacer click
-                    $("#" + clickID).bind("click", delRow);
-                }
+        //Cambio el signo "+" por el signo "-" y le quito el evento agregar
+        $("#" + clickID).val('-').unbind("click", agregar);
 
-                function delRow() {
-                    // Funcion que destruye el elemento actual una vez echo el click
-                    $(this).parent('div').remove();
+        //Ahora le asigno el evento delRow para que borre la fial en caso de hacer click
+        $("#" + clickID).bind("click", delRow);
+    }
 
-                }
+    function delRow() {
+        // Funcion que destruye el elemento actual una vez echo el click
+        $(this).parent('div').remove();
+
+    }
 </script>
 
 @endsection

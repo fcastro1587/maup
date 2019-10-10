@@ -20,10 +20,10 @@ class FilesController extends Controller
 
     public function __construct()
     {
-        $this->middleware('permission:files.createupload')->only(['createupload', 'store']);
-        $this->middleware('permission:files.index')->only('index');
-        $this->middleware('permission:files.show')->only('show');
-        $this->middleware('permission:files.edit')->only(['edit', 'update']);
+        $this->middleware('permission:files-ajax.createupload')->only(['createupload', 'store']);
+        $this->middleware('permission:files-ajax.index')->only('index');
+        $this->middleware('permission:files-ajax.show')->only('show');
+        $this->middleware('permission:files-ajax.edit')->only(['edit', 'update']);
     }
 
     /*******************************************************************************
@@ -647,40 +647,31 @@ class FilesController extends Controller
         }
         //Mega Ofertas
         elseif ($tipo == 4) {
-            /*$clv        = $request['mt'];*/
-
             $rules = array(
-                'upload_image' => 'required|upload_image|max:2048',
-                'orden'        => 'required',
-                'mt'           => 'required',
-
+                'first_name'    =>  'required',
+                'last_name'     =>  'required',
+                'image'         =>  'required|image|max:2048'
             );
 
             $error = Validator::make($request->all(), $rules);
 
-            if ($error->fails()) 
-            {
+            if ($error->fails()) {
                 return response()->json(['errors' => $error->errors()->all()]);
             }
 
-            $image = $request->file('upload_image');
+            $image = $request->file('image');
+            $new_name = $image->getClientOriginalName();
+            Storage::disk('sftp')->put('public_html/images/destinos/home/megaofertases/' . $new_name . '', fopen($image, 'r+'));
 
-            $new_name = rand() . '.' .  $image->getClientOriginalExtension();
-
-            Storage::disk('sftp')->put('public_html/images/destinos/home/megaofertases/' . $new_name . '', fopen($filemega, 'r+'));
 
             $form_data = array(
-                'travel_mt'   => $request->mt,
-                'order_item'  => $request->orden,
+                'travel_mt'               =>  $request->first_name,
+                'season_code_season'      =>  $request->last_name,
             );
 
             SeasonTravel::create($form_data);
 
-            return response()->json(['success' => 'Data Added successfully']);
-
-
-
-https://www.webslesson.info/2019/04/laravel-58-ajax-crud-tutorial-using-datatables.html
+            return response()->json(['success' => 'Data Added successfully.']);
 
 
             /*  if ($request->hasFile('upload_image')) {

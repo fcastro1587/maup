@@ -53,12 +53,14 @@ Route::get('admintc', 'Admin\AdminTController@admin')->name('admintc.admin')
      ->middleware('permission:admintc.admin');                //Tipo de Cambio
 
 Route::resource('file',                    'Admin\FileController');
-Route::resource('files',                   'Admin\FilesController');
+Route::resource('files-ajax',              'Admin\FilesController');
 Route::get('file/{var}/createfile',        'Admin\FileController@createfile')->name('file.createfile'); //esta ruta replasaria a la de create
 Route::get('files/{var}/createupload',     'Admin\FilesController@createupload')->name('files.createupload'); //solo subira archivos
+
+Route::resource('upload-files', 'Admin\UploadFilesController');//bueno
 });
 
-Route::resource('ajax-crud', 'Admin\AjaxCrudController');
+Route::get('upload-files/destroy/{id}', 'Admin\UploadFilesController@destroy');
 
 //ajax datatables viaje
 Route::get('alert/datalert',          'Admin\HomeController@datalert')->name('datalert.datalert');
@@ -70,8 +72,7 @@ Route::get('select/dataremote',       'Admin\HomeController@img')->name('img.img
 Route::get('offers/dataoffer',        'Admin\OffersController@dataoffer')->name('dataoffer.dataoffer');
 Route::get('city/datacity',           'Admin\CityController@datacity')->name('datacity.datacity');
 
-//ajax delete file
-Route::DELETE('file/delete/megaofertas/{id}',        'Admin\FilesController@destruirmt')->name('destruirmt');
+
 
 //envio de tipo de cambio
 Route::post('admintc/sendtc', 'Admin\AdminTController@FormTC')->name('FormTC.send');

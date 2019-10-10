@@ -7,7 +7,7 @@
       </div>
       <div class="modal-body">
         <p>¿Estás seguro de Eliminar éste registro?</p>
-        <form action="{{ route('files.store') }}" id="sample_form" class="form-horizontal" enctype="multipart/form-data" method="POST">
+        <form action="{{ route('files-ajax.store') }}" id="sample_form" class="form-horizontal" enctype="multipart/form-data" method="POST">
         {{ csrf_field() }}
 
         </form>
