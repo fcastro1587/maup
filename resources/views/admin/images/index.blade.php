@@ -29,7 +29,6 @@
   </div>
 
   <div class="col-lg-3 col-xs-6">
-    <!-- small box -->
     <div class="small-box bg-green">
       <div class="inner">
         <img src="https://img1.mtmedia.com.mx/covers/ronda-iberica.jpg" width="82%" alt="">
@@ -43,13 +42,12 @@
       </div>
       @can('file.create')
       @php $var = 1; @endphp
-      <a href="{{route('file.createfile', $var)}}" class="small-box-footer">Crear <i class="fa fa-arrow-circle-right"></i></a>
+      <a href="{{route('upload-files.detalle', $var)}}" class="small-box-footer">Crear <i class="fa fa-arrow-circle-right"></i></a>
       @endcan
     </div>
   </div>
 
   <div class="col-lg-3 col-xs-6">
-    <!-- small box -->
     <div class="small-box bg-green">
       <div class="inner">
         <img src="https://img1.mtmedia.com.mx/deptos/viajes-a-canada.jpg" width="100%" alt="">
@@ -63,13 +61,13 @@
       </div>
       @can('file.create')
       @php $var = 2; @endphp
-      <a href="{{route('files.createupload', $var)}}" class="small-box-footer">Crear *<i class="fa fa-arrow-circle-right"></i></a>
+      <a href="{{route('upload-files.panoramic', $var)}}" class="small-box-footer">Crear *<i class="fa fa-arrow-circle-right"></i></a>
       @endcan
     </div>
   </div>
 
+  <!--
   <div class="col-lg-3 col-xs-6">
-    <!-- small box -->
     <div class="small-box bg-green">
       <div class="inner">
         <img src="https://img3.mtmedia.com.mx/promos/canada/novios-en-las-rocosas-vancouver-victoria.jpg" width="35%" alt="">
@@ -86,10 +84,9 @@
       <a href="{{route('file.createfile', $var)}}" class="small-box-footer">Crear <i class="fa fa-arrow-circle-right"></i></a>
       @endcan
     </div>
-  </div>
+  </div>-->
 
   <div class="col-lg-3 col-xs-6">
-    <!-- small box -->
     <div class="small-box bg-green">
       <div class="inner">
         <img src="https://img3.mtmedia.com.mx/home/megaofertas/3.jpg" width="43%" alt="">
@@ -103,18 +100,17 @@
       </div>
       @can('file.create')
       @php $var = 4; @endphp
-      <a href="{{route('files.createupload', $var)}}" class="small-box-footer">Crear <i class="fa fa-arrow-circle-right"></i></a>
+      <a href="{{route('upload-files.megaofertas', $var)}}" class="small-box-footer">Crear <i class="fa fa-arrow-circle-right"></i></a>
       @endcan
     </div>
   </div>
 
   <div class="col-lg-3 col-xs-6">
-    <!-- small box -->
     <div class="small-box bg-green">
       <div class="inner">
         <img src="https://img3.mtmedia.com.mx/home/otono-invierno/escapada-invernal.jpg" width="94%" alt="">
         <p>
-        Temporada Otoño Invierno
+        Temporadas
         <span>256x278</span>
         </p>
       </div>
@@ -123,12 +119,12 @@
       </div>
       @can('file.create')
       @php $var = 5; @endphp
-      <a href="{{route('file.createfile', $var)}}" class="small-box-footer">Crear <i class="fa fa-arrow-circle-right"></i></a>
+      <a href="{{route('upload-files.temporadas', $var)}}" class="small-box-footer">Crear <i class="fa fa-arrow-circle-right"></i></a>
       @endcan
     </div>
   </div>
+
   <div class="col-lg-3 col-xs-6">
-    <!-- small box -->
     <div class="small-box bg-green">
       <div class="inner">
         <img src="https://img3.mtmedia.com.mx/home/bloqueo/mega-millennials-17-dias-de-invierno.jpg" width="43%" alt="">
@@ -142,12 +138,11 @@
       </div>
       @can('file.create')
       @php $var = 6; @endphp
-      <a href="{{route('file.createfile', $var)}}" class="small-box-footer">Crear <i class="fa fa-arrow-circle-right"></i></a>
+      <a href="{{route('upload-files.blq', $var)}}" class="small-box-footer">Crear <i class="fa fa-arrow-circle-right"></i></a>
       @endcan
     </div>
   </div>
   <div class="col-lg-3 col-xs-6">
-    <!-- small box -->
     <div class="small-box bg-green">
       <div class="inner">
         <img src="https://img3.mtmedia.com.mx/home/favoritos/magia_europea.jpg" width="43%" alt="">
@@ -161,10 +156,12 @@
       </div>
       @can('file.create')
       @php $var = 12; @endphp
-      <a href="{{route('file.createfile', $var)}}" class="small-box-footer">Crear <i class="fa fa-arrow-circle-right"></i></a>
+      <a href="{{route('upload-files.fav', $var)}}" class="small-box-footer">Crear <i class="fa fa-arrow-circle-right"></i></a>
       @endcan
     </div>
   </div>
+
+  <!--
  <div class="col-lg-3 col-xs-6">
     <div class="small-box bg-green">
       <div class="inner">
@@ -202,6 +199,8 @@
       @endcan
     </div>
   </div>
+-->
+
   <div class="col-lg-3 col-xs-6">
     <div class="small-box bg-green">
       <div class="inner">
@@ -216,7 +215,7 @@
       </div>
       @can('file.create')
       @php $var = 11; @endphp
-      <a href="{{route('files.createupload', $var)}}" class="small-box-footer">Crear <i class="fa fa-arrow-circle-right"></i></a>
+      <a href="{{route('upload-files.recommended', $var)}}" class="small-box-footer">Crear <i class="fa fa-arrow-circle-right"></i></a>
       @endcan
     </div>
   </div>

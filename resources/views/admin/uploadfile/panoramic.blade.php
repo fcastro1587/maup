@@ -1,22 +1,33 @@
 @extends('adminlte::layouts.app')
 @section('main-content')
-
+<style>
+    .select2-container {
+        width: 100% !important;
+    }
+</style>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="panel-heading">
+            <h4><i class="fa fa-fw fa-list-alt"></i>PANORAMICA POR DEPARTAMENTO</h4>
+        </div>
+    </div>
+</div>
 <div align="right">
-    <button type="button" name="create_record" id="create_record" class="btn btn-success btn-sm">Create Record</button>
+    <button type="button" name="create_record" id="create_record" class="btn btn-success btn-sm">Nuevo registro</button>
 </div>
 
-<div class="table-responsive">
-    <table class="table table-bordered table-striped" id="user_table">
-        <thead>
-            <tr>
-                <th width="10%">Image</th>
-                <th width="35%">Temporada</th>
-                <th width="35%">orden</th>
-                <th width="30%">Action</th>
-            </tr>
-        </thead>
-    </table>
-</div>
+<table class="table table-bordered table-striped" id="panoramic">
+    <thead>
+        <tr>
+            <th>IMAGEN</th>
+            <th>REGULAR</th>
+            <th>BLOQUEO</th>
+            <th>DESTINO</th>
+            <th>ORDEN</th>
+            <th>ACTION</th>
+        </tr>
+    </thead>
+</table>
 
 <div id="formModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
@@ -29,52 +40,21 @@
                 <span id="form_result"></span>
                 <form method="post" id="sample_form" class="form-horizontal" enctype="multipart/form-data">
                     @csrf
+
                     <div class="form-group">
-                        <label class="control-label col-md-4">MT </label>
-                        <div class="col-md-8">
-                            {{ Form::text('travel_mt', null, ['class' => 'form-control', 'id' => 'travel_mt']) }}
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-4">BLOQUEO: </label>
-                        <div class="col-md-8">
-                            {{ Form::text('bloqueo_mt', null, ['class' => 'form-control', 'id' => 'bloqueo_mt']) }}
+                        <div class="col-md-12">
+                            {{ Form::text('travel_mt', null, ['class' => 'form-control', 'id' => 'travel_mt', 'placeholder' => 'MT REGULAR']) }}
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label col-md-4">ORDEN: </label>
-                        <div class="col-md-8">
-                            {{ Form::text('order_item', null, ['class' => 'form-control', 'id' => 'order_item']) }}
+                        <div class="col-md-12">
+                            {{ Form::text('bloqueo_mt', null, ['class' => 'form-control', 'id' => 'bloqueo_mt', 'placeholder' => 'MT BLOQUEO']) }}
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label col-md-4">TIPO DE IMAGEN: </label>
-                        <div class="col-md-8">
-                    {!! Form::select('multimedia_id_1', [null => 'Seleccione un Destino'] +
-                    [
-                    '2808' => '1.jpg',
-                    'moriente' => 'Medio Oriente',
-                    'canada' => 'Canadá',
-                    'asia' => 'Asia',
-                    'africa' => 'Africa',
-                    'pacifico' => 'Pacifico',
-                    'sudamerica' => 'Sudamérica',
-                    'usa' => 'Estados Unidos',
-                    'camerica' => 'Centroamerica',
-                    'caribe' => 'Caribe',
-                    'mexico' => 'México',
-                    'edeportivo' => 'Eventos Deportivos',
-                    'cruceros' => 'Cruceros',
-                    'jviajera' => 'Juventud Viajera',
-                    'exoticos' => 'Exoticos',
-                    ],null, ['class' => 'form-control img6']) !!}
-                    </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="control-label col-md-4">Select Image : </label>
+                        <label class="control-label col-md-4">DETALLE: </label>
                         <div class="col-md-8">
                             <input type="file" name="image" id="image" />
                             <span id="store_image"></span>
@@ -82,11 +62,44 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label col-md-4">tipo</label>
+                        <label class="control-label col-md-4">MOSAICO: </label>
                         <div class="col-md-8">
-                            {!! Form::select('type',['4' => 'Mega Ofertas (320x400)',],null, ['class' => 'form-control input', 'readonly' => true]) !!}
+                            <input type="file" name="imagemosaico" id="imagemosaico" />
+                            <span id="store_image"></span>
                         </div>
                     </div>
+
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            {!! Form::select('type',['2' => 'Panoramic (1918x300)',],null, ['class' => 'form-control input', 'readonly' => true]) !!}
+                        </div>
+                    </div>
+
+                    <div class=" col-md-12">
+                        <div class="form-group">
+                            {!! Form::select('title', [null => 'Seleccione un Destino'] +
+                            [
+                            'europa' => 'Europa',
+                            'canada' => 'Canadá',
+                            'usa' => 'Estados Unidos',
+                            'mexico' => 'México',
+                            'sudamerica' => 'Sudamérica',
+                            'camerica' => 'Centroamerica',
+                            'caribe' => 'Caribe',
+                            'pacifico' => 'Pacifico',
+                            'moriente' => 'Medio Oriente',
+                            'asia' => 'Asia',
+                            'africa' => 'Africa',
+                            'edeportivo' => 'Eventos Especiales',
+                            'cruceros' => 'Cruceros',
+                            'exoticos' => 'Exoticos',
+                            'jviajera' => 'Juventud Viajera',
+                            'lmiel' => 'Luna de Miel',
+                            'quinceaneras' => 'Quinceañeras',
+                            ],null, ['class' => 'form-control input img2']) !!}
+                        </div>
+                    </div>
+
                     <br />
                     <div class="form-group" align="center">
                         <input type="hidden" name="action" id="action" />
@@ -99,19 +112,15 @@
     </div>
 </div>
 
-
-
-
-
 <div id="confirmModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h2 class="modal-title">Confirmation</h2>
+                <h2 id="delete" class="modal-title">Confirmation</h2>
             </div>
             <div class="modal-body">
-                <h4 align="center" style="margin:0;">Are you sure you want to remove this data?</h4>
+                <h4 align="center" style="margin:0;">Deseas eliminar esta imagen?</h4>
             </div>
             <div class="modal-footer">
                 <button type="button" name="ok_button" id="ok_button" class="btn btn-danger">OK</button>
@@ -124,58 +133,48 @@
 
 @section('script')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
-<script type="text/javascript">
-    $(document).ready(function() {
-        $(".img6").select2();
-
-        function formatState(opt) {
-            if (!opt.id) {
-                return opt.text.toUpperCase();
-            }
-
-            var optimage = $(opt.element).attr('data-image');
-            console.log(optimage)
-            if (!optimage) {
-                return opt.text.toLowerCase();
-            } else {
-                var $opt = $(
-                    '<span><img src="' + optimage + '" width="120px" /> ' + opt.text.toLowerCase() + '</span>'
-                );
-                return $opt;
-            }
-        };
-    });
-</script>
 <script>
     $(document).ready(function() {
-
-        $('#user_table').DataTable({
+        $('#panoramic').DataTable({
             processing: true,
             serverSide: true,
+            info: false,
             ajax: {
-                url: "{{ route('upload-files.index') }}",
+                url: "{{ route('uploadfiles.indexpanoramic') }}",
             },
             columns: [{
                     data: 'name',
                     name: 'multimedia.name',
                     render: function(data, type, row) {
-                        return "<img src=https://img3.mtmedia.com.mx/home/megaofertas/" + data + " width='80' class='img-thumbnail'/>";
+                        return "<img src=https://img1.mtmedia.com.mx/deptos/" + data + " width='200' class='img-thumbnail'/>";
                     }
                 },
                 {
-                    data: 'season_code_season',
-                    name: 'season_travels.season_code_season'
+                    data: 'header_mt',
+                    name: 'headers.header_mt',
                 },
                 {
-                    data: 'order_item',
-                    name: 'season_travels.order_item'
+                    data: 'bloqueo_mt',
+                    name: 'headers.bloqueo_mt',
+                },
+                {
+                    data: 'header_department',
+                    name: 'headers.header_department',
+                },
+                {
+                    data: 'order',
+                    name: 'headers.order',
                 },
                 {
                     data: 'btn',
                     name: 'btn',
                     orderable: false
                 }
-            ]
+            ],
+            "lengthMenu": [
+                [15, 20, 50, -1],
+                [15, 20, 50, "Todos"]
+            ],
         });
 
         //modal crear
@@ -209,7 +208,7 @@
                         if (data.success) {
                             html = '<div class="alert alert-success">' + data.success + '</div>';
                             $('#sample_form')[0].reset();
-                            $('#user_table').DataTable().ajax.reload();
+                            $('#panoramic').DataTable().ajax.reload();
                         }
                         $('#form_result').html(html);
                     }
@@ -219,15 +218,15 @@
         });
 
         var user_id;
-
         $(document).on('click', '.delete', function() {
             user_id = $(this).attr('id');
+            $('#delete').text("Confirmar?");
             $('#confirmModal').modal('show');
         });
 
         $('#ok_button').click(function() {
             $.ajax({
-                url: "upload-files/destroy/" + user_id,
+                url: "{{url('upload-files/destropanoramic')}}/" + user_id,
                 beforeSend: function() {
                     $('#ok_button').text('Deleting...');
                     $(this).fadeOut();
@@ -235,13 +234,13 @@
                 success: function(data) {
                     setTimeout(function() {
                         $('#confirmModal').modal('hide');
-                        $('#user_table').DataTable().ajax.reload();
+                        $('#panoramic').DataTable().ajax.reload();
                     }, 2000);
                 }
             })
         });
 
-        $('.uploadimg').select2();
+        $(".img2").select2();
 
     }); //FIN DOCUMENTO JQUERY
 </script>
