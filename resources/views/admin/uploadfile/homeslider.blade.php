@@ -1,10 +1,9 @@
 @extends('adminlte::layouts.app')
 @section('main-content')
-
 <div class="panel panel-default">
     <div class="panel-body">
         <div class="panel-heading">
-            <h4><i class="fa fa-fw fa-image"></i>IMAGEN RECOMENDADA</h4>
+            <h4><i class="fa fa-fw fa-image"></i>SLIDER PRINCIPAL</h4>
         </div>
     </div>
 
@@ -16,13 +15,12 @@
 </div>
 
 
-<table class="table table-bordered table-striped" id="recomendado">
+<table class="table table-bordered table-striped" id="main">
     <thead>
         <tr>
             <th>IMAGEN</th>
-            <th>REGULAR</th>
             <th>BLOQUEO</th>
-            <th>DESTINO</th>
+            <th>ORDEN</th>
             <th>ACTION</th>
         </tr>
     </thead>
@@ -53,23 +51,48 @@
                     </div>
 
                     <div class="form-group">
-                        <div class="col-md-12">
-                            {{Form::select('department', $department, null, ['class' => 'form-control img2', 'placeholder'=>'Seleccionar departamento' , 'id' => 'department']) }}
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="control-label col-md-4">Imagen Recomendada: </label>
-                        <div class="col-md-8">
+                        <div class="col-md-6">
                             <input type="file" name="image" id="image" />
                             <span id="store_image"></span>
                         </div>
+
+                        <div class="col-md-6">
+                            {!! Form::select('type1',['8' => 'Fondo (1700x566)',],null, ['class' => 'tipo form-control input', 'readonly' => true]) !!}
+                        </div>
                     </div>
 
+                    <div class="form-group">
+                        <div class="col-md-6">
+                            <input type="file" name="imageresponsive" id="imageresponsive" />
+                            <span id="store_image"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            {!! Form::select('type3',['10' => 'Responsive (320x400)',],null, ['class' => 'tipo form-control input', 'readonly' => true]) !!}
+                        </div>
+                    </div>
 
                     <div class="form-group">
                         <div class="col-md-12">
-                            {!! Form::select('type',['11' => 'recomendado (324x152)',],null, ['class' => 'tipo form-control input', 'readonly' => true]) !!}
+                            {{ Form::textarea('description', null, ['class' => 'form-control', 'id' => 'description', 'placeholder' => 'DESCRIPCIÓN DE LA IMAGEN']) }}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            {{ Form::select('country', $countries, null,  array('class' => 'form-control country input', 'id' => 'pais', 'placeholder' => 'Seleccione un Pais')) }}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            {{ Form::select('city', $cities, null,  array('class' => 'form-control city input', 'id' => 'ciudad', 'placeholder' => 'Seleccione una Ciudad')) }}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            {{ Form::hidden('type', 'main', ['id' => 'invisible_id']) }}
                         </div>
                     </div>
 
@@ -79,7 +102,6 @@
                         <input type="hidden" name="hidden_id" id="hidden_id" />
                         <input type="submit" name="action_button" id="action_button" class="btn btn-primary" value="Add" />
                     </div>
-
                 </form>
             </div>
         </div>
@@ -97,8 +119,8 @@
                 <h4 align="center" style="margin:0;">Deseas eliminar esta imagen?</h4>
             </div>
             <div class="modal-footer">
-                <button type="button" name="ok_button" id="ok_button" class="btn btn-success">OK</button>
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                <button type="button" name="ok_button" id="ok_button" class="btn btn-danger">OK</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
             </div>
         </div>
     </div>
@@ -109,31 +131,29 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
 <script>
     $(document).ready(function() {
-        $('#recomendado').DataTable({
+        $('#main').DataTable({
             processing: true,
             serverSide: true,
+            bFilter: false,
+            paging: false,
             info: false,
             ajax: {
-                url: "{{ route('uploadfiles.indexrecommended') }}",
+                url: "{{ route('uploadfiles.indexhomeslider') }}",
             },
             columns: [{
                     data: 'name',
                     name: 'multimedia.name',
                     render: function(data, type, row) {
-                        return "<img src=https://img2.mtmedia.com.mx/recommend/" + data + " width='250' class='img-thumbnail'/>";
+                        return "<img src=https://img1.mtmedia.com.mx/slider-home/" + data + " width='300' class='img-thumbnail'/>";
                     }
                 },
                 {
-                    data: 'travel_mt',
-                    name: 'recommended_departments.travel_mt',
-                },
-                {
                     data: 'bloqueo_mt',
-                    name: 'recommended_departments.bloqueo_mt',
+                    name: 'main_carousels.bloqueo_mt',
                 },
                 {
-                    data: 'code_department',
-                    name: 'recommended_departments.code_department',
+                    data: 'order_item',
+                    name: 'main_carousels.order_item',
                 },
                 {
                     data: 'btn',
@@ -174,7 +194,7 @@
                         if (data.success) {
                             html = '<div class="alert alert-success">' + data.success + '</div>';
                             $('#sample_form')[0].reset();
-                            $('#recomendado').DataTable().ajax.reload();
+                            $('#main').DataTable().ajax.reload();
                         }
                         $('#form_result').html(html);
                     }
@@ -192,7 +212,7 @@
 
         $('#ok_button').click(function() {
             $.ajax({
-                url: "{{url('upload-files/destrorecomended')}}/" + user_id,
+                url: "{{url('upload-files/destromain')}}/" + user_id,
                 beforeSend: function() {
                     $('#ok_button').text('Deleting...');
                     $(this).fadeOut();
@@ -200,7 +220,7 @@
                 success: function(data) {
                     setTimeout(function() {
                         $('#confirmModal').modal('hide');
-                        $('#recomendado').DataTable().ajax.reload();
+                        $('#main').DataTable().ajax.reload();
                     }, 2000);
                 }
             })

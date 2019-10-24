@@ -147,6 +147,13 @@ return [
         'code_issu'             => 'Codigo issu',
         'uploadsmall'           => 'Imagen responsive',
         'upload_image'          => 'Imagen principal',
-        'mt'                    => 'MT'
+        'mt'                    => 'MT',
+        'image'                 => 'Imagen',
+        'imageresponsive'       => 'Imagen responsiva',
+        'imagemosaico'          => 'Imagen mosaico',
+        'order'                 => 'Orden',
+        'multimedia_id_1'       => 'Destino',
+        'order_item'            => 'Orden',
+        'department'            => 'Departamento'
     ],
 ];

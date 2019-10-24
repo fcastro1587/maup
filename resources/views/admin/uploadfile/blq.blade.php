@@ -1,25 +1,30 @@
 @extends('adminlte::layouts.app')
 @section('main-content')
 <style>
-.select2-container{
-    width: 100% !important;
-}
+    .select2-container {
+        width: 100% !important;
+    }
 </style>
 <div class="panel panel-default">
     <div class="panel-body">
         <div class="panel-heading">
-            <h4><i class="fa fa-fw fa-list-alt"></i>BLOQUEOS</h4>
+            <h4><i class="fa fa-fw fa-image"></i>BANNERS BLOQUEOS</h4>
+        </div>
+    </div>
+
+    <div class="panel-body">
+        <div class="panel-heading">
+            <button type="button" name="create_record" id="create_record" class="btn btn-success btn-sm">Nuevo registro</button>
         </div>
     </div>
 </div>
-<div align="right">
-    <button type="button" name="create_record" id="create_record" class="btn btn-success btn-sm">Nuevo registro</button>
-</div>
+
 
 <table class="table table-bordered table-striped" id="fav">
     <thead>
         <tr>
             <th>IMAGEN</th>
+            <th>BLOQUEO</th>
             <th>ORDEN</th>
             <th>ACTION</th>
         </tr>
@@ -65,7 +70,7 @@
 
                     <div class="form-group">
                         <div class="col-md-12">
-                            {!! Form::select('type',['6' => 'Bloqueos (291x384)',],null, ['class' => 'form-control input', 'readonly' => true]) !!}
+                            {!! Form::select('type',['6' => 'Bloqueos (291x384)',],null, ['class' => 'tipo form-control input', 'readonly' => true]) !!}
                         </div>
                     </div>
 
@@ -90,7 +95,7 @@
                     <div class="form-group" align="center">
                         <input type="hidden" name="action" id="action" />
                         <input type="hidden" name="hidden_id" id="hidden_id" />
-                        <input type="submit" name="action_button" id="action_button" class="btn btn-warning" value="Add" />
+                        <input type="submit" name="action_button" id="action_button" class="btn btn-primary" value="Add" />
                     </div>
                 </form>
             </div>
@@ -109,8 +114,8 @@
                 <h4 align="center" style="margin:0;">Deseas eliminar esta imagen?</h4>
             </div>
             <div class="modal-footer">
-                <button type="button" name="ok_button" id="ok_button" class="btn btn-danger">OK</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" name="ok_button" id="ok_button" class="btn btn-success">OK</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
             </div>
         </div>
     </div>
@@ -134,8 +139,12 @@
                     data: 'name',
                     name: 'multimedia.name',
                     render: function(data, type, row) {
-                        return "<img src=https://img3.mtmedia.com.mx/home/bloqueo/" + data + " width='80' class='img-thumbnail'/>";
+                        return "<img src=https://img3.mtmedia.com.mx/home/bloqueo/" + data + " width='120' class='img-thumbnail'/>";
                     }
+                },
+                {
+                    data: 'bloqueo_mt',
+                    name: 'season_travels.bloqueo_mt'
                 },
                 {
                     data: 'order_item',

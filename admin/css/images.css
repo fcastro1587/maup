@@ -1,0 +1,41 @@
+    .select2-container {
+        width: 100% !important;
+        border-radius: 10px;
+        border: solid 1px rgba(0, 0, 0, .2);
+    }
+    
+    .dataTables_length select {
+        border-radius: 5px;
+        background: #337ab7;
+        color: #ffffff;
+        border: 2px solid #337ab7;
+    }
+    
+    .dataTables_filter {
+        float: right;
+    }
+    
+    .dataTables_filter input[type="search"] {
+        border-radius: 5px;
+        float: right;
+        border: 2px solid #337ab7;
+    }
+    
+    input[type="text"],
+    #description {
+        border-radius: 10px;
+        border: solid 1px rgba(0, 0, 0, .2);
+    }
+    
+    input[type="text"] {
+        height: 40px;
+    }
+    
+    #description {
+        height: 100px;
+    }
+    
+    .modal-body .form-group .tipo {
+        background-color: #008d4c;
+        color: #ffffff;
+    }

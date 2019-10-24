@@ -9,9 +9,10 @@
 
     <link href="{{ asset('/css/all.css') }}" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="{{ asset('/css/AdminLTE.css') }}">
-    <link rel="stylesheet" href="{{ asset('/css/datatables.css') }}">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cafe.megatravel.com.mx/assets/css/section.css">
     <link href="{{asset('css/select2.min.css')}}" rel="stylesheet" />
+    <link href="{{asset('css/images.css')}}" rel="stylesheet">
 
 
 

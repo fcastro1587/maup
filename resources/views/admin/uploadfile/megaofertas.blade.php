@@ -3,13 +3,16 @@
 <div class="panel panel-default">
     <div class="panel-body">
         <div class="panel-heading">
-            <h4><i class="fa fa-fw fa-list-alt"></i>CARRUSEL SEMANAL</h4>
+            <h4><i class="fa fa-fw fa-image"></i>CARRUSEL SEMANAL</h4>
         </div>
     </div>
-</div>
-<div align="right">
+
+    <div class="panel-body">
+        <div class="panel-heading">
     <button type="button" name="create_record" id="create_record" class="btn btn-success btn-sm">Nuevo registro</button>
+</div></div>
 </div>
+
 
 
 <table class="table table-bordered table-striped" id="megaofertas_table">
@@ -84,14 +87,14 @@
                     <div class="form-group">
                         <label class="control-label col-md-4">TIPO DE IMAGEN: </label>
                         <div class="col-md-8">
-                            {!! Form::select('type',['4' => 'Mega Ofertas (320x400)',],null, ['class' => 'form-control input', 'readonly' => true]) !!}
+                            {!! Form::select('type',['4' => 'Mega Ofertas (320x400)',],null, ['class' => 'tipo form-control input', 'readonly' => true]) !!}
                         </div>
                     </div>
                     <br />
                     <div class="form-group" align="center">
                         <input type="hidden" name="action" id="action" />
                         <input type="hidden" name="hidden_id" id="hidden_id" />
-                        <input type="submit" name="action_button" id="action_button" class="btn btn-warning" value="Add" />
+                        <input type="submit" name="action_button" id="action_button" class="btn btn-primary" value="Add" />
                     </div>
                 </form>
             </div>
@@ -110,8 +113,8 @@
                 <h4 align="center" style="margin:0;">Deseas eliminar esta imagen?</h4>
             </div>
             <div class="modal-footer">
-                <button type="button" name="ok_button" id="ok_button" class="btn btn-danger">OK</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" name="ok_button" id="ok_button" class="btn btn-success">OK</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
             </div>
         </div>
     </div>
@@ -136,7 +139,7 @@
                     data: 'name',
                     name: 'multimedia.name',
                     render: function(data, type, row) {
-                        return "<img src=https://img3.mtmedia.com.mx/home/megaofertas/" + data + " width='80' class='img-thumbnail'/>";
+                        return "<img src=https://img3.mtmedia.com.mx/home/megaofertas/" + data + " width='140' class='img-thumbnail'/>";
                     }
                 },
                 {

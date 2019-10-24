@@ -20,3 +20,9 @@ Route::get('viaje', function(){
   ->eloquent(App\Travel::query())
   ->toJson();
 });
+
+
+
+
+
+

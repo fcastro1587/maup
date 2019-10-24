@@ -66,7 +66,7 @@
     </div>
   </div>
 
-  <!--
+  
   <div class="col-lg-3 col-xs-6">
     <div class="small-box bg-green">
       <div class="inner">
@@ -81,10 +81,10 @@
       </div>
       @can('file.create')
       @php $var = 3; @endphp
-      <a href="{{route('file.createfile', $var)}}" class="small-box-footer">Crear <i class="fa fa-arrow-circle-right"></i></a>
+      <a href="{{route('upload-files.deptos', $var)}}" class="small-box-footer">Crear <i class="fa fa-arrow-circle-right"></i></a>
       @endcan
     </div>
-  </div>-->
+  </div>
 
   <div class="col-lg-3 col-xs-6">
     <div class="small-box bg-green">
@@ -161,7 +161,6 @@
     </div>
   </div>
 
-  <!--
  <div class="col-lg-3 col-xs-6">
     <div class="small-box bg-green">
       <div class="inner">
@@ -176,7 +175,7 @@
       </div>
       @can('file.create')
       @php $var = 7; @endphp
-      <a href="{{route('files.createupload', $var)}}" class="small-box-footer">Crear <i class="fa fa-arrow-circle-right"></i></a>
+      <a href="{{route('upload-files.listado', $var)}}" class="small-box-footer">Crear <i class="fa fa-arrow-circle-right"></i></a>
       @endcan
     </div>
   </div>
@@ -195,11 +194,11 @@
       </div>
       @can('file.create')
       @php $var = 8; @endphp
-      <a href="{{route('files.createupload', $var)}}" class="small-box-footer">Crear <i class="fa fa-arrow-circle-right"></i></a>
+      <a href="{{route('upload-files.homeslider', $var)}}" class="small-box-footer">Crear <i class="fa fa-arrow-circle-right"></i></a>
       @endcan
     </div>
   </div>
--->
+
 
   <div class="col-lg-3 col-xs-6">
     <div class="small-box bg-green">

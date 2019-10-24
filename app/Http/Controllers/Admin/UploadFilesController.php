@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use File;
@@ -10,10 +11,13 @@ use App\Multimedia;
 use App\MultimediaTravel;
 use App\Country;
 use App\Header;
+use App\Banner;
 use App\City;
 use App\RecommendedDepartment;
 use App\SeasonTravel;
 use App\Department;
+use App\MainCarousel;
+use App\CarouselTravel;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 
@@ -27,6 +31,7 @@ class UploadFilesController extends Controller
         $this->middleware('permission:upload-files.show')->only('show');
         $this->middleware('permission:upload-files.edit')->only(['edit', 'update']);
     }
+
 
     public function index()
     {
@@ -42,7 +47,7 @@ class UploadFilesController extends Controller
                     'season_travels.order_item'
                 )
                 ->where('season_travels.season_code_season', 'PRO')
-                ->orderby('season_travel_id', 'desc');
+                ->orderby('season_travels.order_item', 'ASC');
 
             return datatables()
                 ->eloquent($season)
@@ -78,6 +83,8 @@ class UploadFilesController extends Controller
         return view('admin.uploadfile.detalle');
     }
 
+
+
     public function indexpanoramic()
     {
         if (request()->ajax()) {
@@ -104,6 +111,58 @@ class UploadFilesController extends Controller
         return view('admin.uploadfile.panoramic');
     }
 
+    public function indexlistado()
+    {
+        if (request()->ajax()) {
+
+            $season = Banner
+                ::join('multimedia', 'multimedia.id', '=', 'banners.img1')
+                ->select(
+                    'multimedia.id',
+                    'multimedia.name',
+                    'banners.id AS season_travel_id',
+                    'banners.banner_department',
+                    'banners.img1',
+                    'banners.status'
+                )
+                ->orderby('season_travel_id', 'desc');
+
+            return datatables()
+                ->eloquent($season)
+                ->addColumn('btn', 'admin.uploadfile.partials.actions')
+                ->rawColumns(['btn'])
+                ->toJson();
+        }
+        return view('admin.uploadfile.panoramic');
+    }
+
+    public function indexhomeslider()
+    {
+
+        if (request()->ajax()) {
+
+            $season = MainCarousel
+                ::join('multimedia', 'multimedia.id', '=', 'main_carousels.multimedia_id_1')
+                ->select(
+                    'multimedia.id',
+                    'multimedia.name',
+                    'main_carousels.id AS season_travel_id',
+                    'main_carousels.bloqueo_mt',
+                    'main_carousels.order_item'
+                )
+                ->where('main_carousels.active_item', 1)
+                ->orderby('season_travel_id', 'desc');
+
+            return datatables()
+                ->eloquent($season)
+                ->addColumn('btn', 'admin.uploadfile.partials.actions')
+                ->rawColumns(['btn'])
+                ->toJson();
+        }
+
+        return view('admin.uploadfile.homeslider');
+    }
+
     public function indextemporada()
     {
         if (request()->ajax()) {
@@ -114,7 +173,9 @@ class UploadFilesController extends Controller
                     'multimedia.id',
                     'multimedia.name',
                     'season_travels.id AS season_travel_id',
-                    'season_travels.order_item'
+                    'season_travels.order_item',
+                    'season_travels.travel_mt',
+                    'season_travels.bloqueo_mt'
                 )
                 ->where('season_travels.season_code_season', 'OTOINV')
                 ->orderby('season_travel_id', 'desc');
@@ -139,6 +200,7 @@ class UploadFilesController extends Controller
                     'multimedia.id',
                     'multimedia.name',
                     'season_travels.id AS season_travel_id',
+                    'season_travels.bloqueo_mt',
                     'season_travels.order_item'
                 )
                 ->where('season_travels.season_code_season', 'BLO')
@@ -165,7 +227,9 @@ class UploadFilesController extends Controller
                     'multimedia.id',
                     'multimedia.name',
                     'season_travels.id AS season_travel_id',
-                    'season_travels.order_item'
+                    'season_travels.order_item',
+                    'season_travels.travel_mt',
+                    'season_travels.bloqueo_mt'
                 )
                 ->where('season_travels.season_code_season', 'FAV')
                 ->where('active_item', 1)
@@ -206,6 +270,36 @@ class UploadFilesController extends Controller
         }
     }
 
+
+    public function indexdeptos()
+    {
+        if (request()->ajax()) {
+            $season = CarouselTravel
+                ::join('multimedia', 'multimedia.id', '=', 'carousel_travels.multimedia_id')
+                ->select(
+                    'multimedia.id',
+                    'multimedia.name',
+                    'carousel_travels.id AS season_travel_id',
+                    'carousel_travels.carousel_travel_mt',
+                    'carousel_travels.bloqueo_mt',
+                    'carousel_travels.carousel_travel_code',
+                    'carousel_travels.order',
+                    'carousel_travels.active'
+                )
+                ->where('carousel_travels.active', 1)
+                ->where('active', 1)
+                ->orderby('season_travel_id', 'desc');
+
+            return datatables()
+                ->eloquent($season)
+                ->addColumn('btn', 'admin.uploadfile.partials.actions')
+                ->rawColumns(['btn'])
+                ->toJson();
+        }
+
+        return view('admin.uploadfile.deptos');
+    }
+
     public function detalle($var)
     {
         $countries = Country::orderby('name_country', 'asc')
@@ -220,6 +314,17 @@ class UploadFilesController extends Controller
     public function panoramic()
     {
         return view('admin.uploadfile.panoramic');
+    }
+
+    public function homeslider($var)
+    {
+        $countries = Country::orderby('name_country', 'asc')
+            ->pluck('name_country', 'code_iata');
+
+        $cities    = City::orderby('name', 'asc')
+            ->pluck('name', 'id');
+
+        return view('admin.uploadfile.homeslider', compact('var', 'countries', 'cities'));
     }
 
     public function megaofertas($var)
@@ -267,6 +372,30 @@ class UploadFilesController extends Controller
         return view('admin.uploadfile.recommended', compact('var', 'department'));
     }
 
+    public function deptos($var)
+    {
+        $countries  = Country::orderby('name_country', 'asc')
+            ->pluck('name_country', 'code_iata');
+
+        $cities     = City::orderby('name', 'asc')
+            ->pluck('name', 'id');
+
+        $department = Department::orderby('code', 'asc')->pluck('name', 'code');
+
+        return view('admin.uploadfile.deptos', compact('var', 'countries', 'cities', 'department'));
+    }
+
+    public function listado($var)
+    {
+        $countries  = Country::orderby('name_country', 'asc')
+            ->pluck('name_country', 'code_iata');
+
+        $cities     = City::orderby('name', 'asc')
+            ->pluck('name', 'id');
+
+        return view('admin.uploadfile.listado', compact('var',  'countries', 'cities'));
+    }
+
 
     public function create()
     {
@@ -277,13 +406,90 @@ class UploadFilesController extends Controller
     public function store(Request $request)
     {
         switch ($request['type']) {
+
+                //Carrusel principal de la página
+            case "main";
+                $rules =  array(
+                    'image'                  => 'required|image|max:500',
+                    'imageresponsive'        => 'required',
+                    'description'            => 'required',
+                    'country'                => 'required',
+                    'city'                   => 'required'
+                );
+
+                $error = Validator::make($request->all(), $rules);
+
+                if ($error->fails()) {
+                    return response()->json(['errors' => $error->errors()->all()]);
+                }
+
+                $image      = $request->file('image');
+                $new_name   = $image->getClientOriginalName();
+                $new_name  = pathinfo($new_name, PATHINFO_FILENAME);
+                $new_name  = str_slug($new_name);
+                $new_name  = $new_name . '.jpg';
+
+                $imager     = $request->file('imageresponsive');
+                $new_namer  = $imager->getClientOriginalName();
+                $new_namer  = pathinfo($new_namer, PATHINFO_FILENAME);
+                $new_namer  = str_slug($new_namer);
+                $new_namer  = $new_namer . '.jpg';
+
+                Storage::disk('sftp')->put('public_html/images/slider-home/' . $new_name . '', fopen($image, 'r+'));
+                Storage::disk('sftp')->put('public_html/images/slider-home/320x340/' . $new_namer . '', fopen($imager, 'r+'));
+
+                $multiple1 = array(
+                    'name'          =>  $new_name,
+                    'title'         =>  $request->description,
+                    'country'       =>  $request->country,
+                    'city'          =>  $request->city,
+                    'description'   =>  $request->description,
+                    'size'          =>  '1700x566',
+                    'type'          =>  '8',
+                );
+                Multimedia::create($multiple1);
+
+                $multiple2 = array(
+                    'name'          =>  $new_namer,
+                    'title'         =>  $request->description,
+                    'country'       =>  $request->country,
+                    'city'          =>  $request->city,
+                    'description'   =>  $request->description,
+                    'size'          =>  '320x400',
+                    'type'          =>  '10',
+                );
+                Multimedia::create($multiple2);
+
+
+                $multi2 = Multimedia::where('name', $new_name)
+                    ->where('type', 8)->first();
+
+
+                $multi3 = Multimedia::where('name', $new_namer)
+                    ->where('type', 10)->first();
+
+                $main2 = array(
+                    'travel_mt'         =>  $request->travel_mt,
+                    'bloqueo_mt'        =>  $request->bloqueo_mt,
+                    'multimedia_id_1'   =>  $multi2->id,
+                    'multimedia_id_2'   =>  $multi3->id,
+                    'order_item'        =>  '1',
+                    'active_item'       =>  '1',
+                );
+                MainCarousel::create($main2);
+
+                return response()->json(['success' => 'Oferta agregada correctamente al Slider de Home']);
+
+                break;
+
+                //detalle y mosaico
             case "1";
                 $rules = array(
-                    'image'           => 'required|image|max:2048',
-                    'imagemosaico'    => 'required|image|max:2048',
+                    'image'           => 'required|image|max:300',
+                    'imagemosaico'    => 'required',
                     'description'     => 'required',
                     'country'         => 'required',
-                    'city'           => 'required'
+                    'city'            => 'required'
                 );
 
                 $error = Validator::make($request->all(), $rules);
@@ -295,10 +501,14 @@ class UploadFilesController extends Controller
                 if ($request->hasFile('image') || $request->hasFile('imagemosaico')) {
                     $image     = $request->file('image');
                     $new_name  = $image->getClientOriginalName();
+                    $new_name  = pathinfo($new_name, PATHINFO_FILENAME);
+                    $new_name  = str_slug($new_name);
+                    $new_name  = $new_name . '.jpg';
+
                     $imagem    = $request->file('imagemosaico');
 
-                    Storage::disk('sftp')->put('public_html/images/destinos/home/megaofertases/' . $new_name . '', fopen($image, 'r+'));
-                    Storage::disk('sftp')->put('public_html/images/destinos/home/megaofertases/responsive/' . $new_name . '', fopen($imagem, 'r+'));
+                    Storage::disk('sftp')->put('public_html/images/covers/' . $new_name . '', fopen($image, 'r+'));
+                    Storage::disk('sftp')->put('public_html/images/thumbnails/' . $new_name . '', fopen($imagem, 'r+'));
                 }
 
                 $multiple = array(
@@ -325,11 +535,12 @@ class UploadFilesController extends Controller
                 return response()->json(['success' => 'Imagen y MT agregado correctamente']);
                 break;
 
+                //panoramica por departamento
             case "2";
                 $rules = array(
-                    'title'           => 'required',
-                    'image'           => 'required|image|max:2048',
-                    'imagemosaico'    => 'required'
+                    'title'             => 'required',
+                    'image'             => 'required|image|max:600',
+                    'imageresponsive'   => 'required'
                 );
 
                 $error = Validator::make($request->all(), $rules);
@@ -340,7 +551,7 @@ class UploadFilesController extends Controller
                 $image                = $request->file('image');
                 $name                 = $image->getClientOriginalName();
 
-                $fileother            = $request->file('imagemosaico');
+                $fileother            = $request->file('imageresponsive');
                 $nameother            = $fileother->getClientOriginalName();
 
                 switch ($request['title']) {
@@ -428,12 +639,52 @@ class UploadFilesController extends Controller
                 );
                 Header::create($form_data);
 
-                Storage::disk('sftp')->put('public_html/images/destinos/home/megaofertases/' . $name . '', fopen($image, 'r+'));
-                Storage::disk('sftp')->put('public_html/images/destinos/home/megaofertases/responsive/' . $nameother . '', fopen($fileother, 'r+'));
+                Storage::disk('sftp')->put('public_html/images/deptos/' . $name . '', fopen($image, 'r+'));
+                Storage::disk('sftp')->put('public_html/images/deptos/responsive/' . $nameother . '', fopen($fileother, 'r+'));
 
                 return response()->json(['success' => 'Imagen panoramica agregada correctamente']);
                 break;
 
+                //destacados por departamento
+            case "3";
+                $rules = array(
+                    'image'           => 'required|image|max:100',
+                    'description'     => 'required',
+                    'country'         => 'required',
+                    'city'            => 'required',
+                    'title'           => 'required',
+                    'order'           => 'required'
+                );
+
+                $error = Validator::make($request->all(), $rules);
+
+                if ($error->fails()) {
+                    return response()->json(['errors' => $error->errors()->all()]);
+                }
+
+                $image     = $request->file('image');
+                $new_name  = $image->getClientOriginalName();
+                $new_name  = pathinfo($new_name, PATHINFO_FILENAME);
+                $new_name  = str_slug($new_name);
+                $new_name  = $new_name . '.jpg';
+
+                Storage::disk('sftp')->put('public_html/images/destinos/promos/' . $request->title . '/' . $new_name . '', fopen($image, 'r+'));
+
+                $multiple = array(
+                    'name'          =>  $new_name,
+                    'title'         =>  $request->title,
+                    'country'       =>  $request->country,
+                    'city'          =>  $request->city,
+                    'description'   =>  $request->description,
+                    'size'          =>  '230x300',
+                    'type'          =>  $request->type,
+                );
+                Multimedia::create($multiple);
+
+                return response()->json(['success' => 'Banner agregado correctamente a su destino']);
+                break;
+
+                //megaofertas
             case "4";
                 $rules = array(
                     'order_item'      => 'required',
@@ -449,7 +700,7 @@ class UploadFilesController extends Controller
 
                 $image    = $request->file('image');
                 $new_name = $image->getClientOriginalName();
-                Storage::disk('sftp')->put('public_html/images/destinos/home/megaofertases/' . $new_name . '', fopen($image, 'r+'));
+                Storage::disk('sftp')->put('public_html/images/destinos/home/megaofertas/' . $new_name . '', fopen($image, 'r+'));
 
                 $form_data = array(
                     'travel_mt'               =>  $request->travel_mt,
@@ -464,13 +715,14 @@ class UploadFilesController extends Controller
                 return response()->json(['success' => 'Oferta agregada correctamente']);
                 break;
 
+                //Temporada otono-invierno
             case "5";
                 $rules = array(
                     'order_item'      => 'required',
                     'description'     => 'required',
                     'country'         => 'required',
                     'city'            => 'required',
-                    'image'           => 'required|image|max:2048'
+                    'image'           => 'required|image|max:50'
                 );
 
                 $error = Validator::make($request->all(), $rules);
@@ -481,7 +733,11 @@ class UploadFilesController extends Controller
 
                 $image    = $request->file('image');
                 $new_name = $image->getClientOriginalName();
-                Storage::disk('sftp')->put('public_html/images/destinos/home/megaofertases/' . $new_name . '', fopen($image, 'r+'));
+                $new_name  = pathinfo($new_name, PATHINFO_FILENAME);
+                $new_name  = str_slug($new_name);
+                $new_name  = $new_name . '.jpg';
+
+                Storage::disk('sftp')->put('public_html/images/destinos/home/otono-invierno/' . $new_name . '', fopen($image, 'r+'));
 
                 $multiple = array(
                     'name'          =>  $new_name,
@@ -495,6 +751,7 @@ class UploadFilesController extends Controller
                 Multimedia::create($multiple);
 
                 $image = Multimedia::where('name', $new_name)
+                    ->where('title', 'otono-invierno')
                     ->where('type', 5)->first();
 
                 $season = array(
@@ -511,13 +768,14 @@ class UploadFilesController extends Controller
                 return response()->json(['success' => 'Se ha agregado a la sección OTOÑO INVIERNO']);
                 break;
 
+                //Banners bloqueos
             case "6";
                 $rules = array(
                     'order_item'      => 'required',
                     'description'     => 'required',
                     'country'         => 'required',
                     'city'            => 'required',
-                    'image'           => 'required|image|max:2048'
+                    'image'           => 'required|image|max:60'
                 );
 
                 $error = Validator::make($request->all(), $rules);
@@ -528,7 +786,7 @@ class UploadFilesController extends Controller
 
                 $image    = $request->file('image');
                 $new_name = $image->getClientOriginalName();
-                Storage::disk('sftp')->put('public_html/images/destinos/home/megaofertases/' . $new_name . '', fopen($image, 'r+'));
+                Storage::disk('sftp')->put('public_html/images/destinos/home/bloqueo/' . $new_name . '', fopen($image, 'r+'));
 
                 $multiple = array(
                     'name'          =>  $new_name,
@@ -558,10 +816,87 @@ class UploadFilesController extends Controller
                 return response()->json(['success' => 'Se ha agregado a la sección de BLOQUEOS']);
                 break;
 
+            case "7";
+                $rules =  array(
+                    'image'                  => 'required|image|max:70',
+                    'imageresponsive'        => 'required',
+                    'title'                  => 'required',
+                    'description'            => 'required'
+                );
+
+                $error = Validator::make($request->all(), $rules);
+
+                if ($error->fails()) {
+                    return response()->json(['errors' => $error->errors()->all()]);
+                }
+
+                $image      = $request->file('image');
+                $new_name   = $image->getClientOriginalName();
+                $new_name  = pathinfo($new_name, PATHINFO_FILENAME);
+                $new_name  = str_slug($new_name);
+                $new_name  = $new_name . '.jpg';
+
+                $imager     = $request->file('imageresponsive');
+                $new_namer  = $imager->getClientOriginalName();
+                $new_namer  = pathinfo($new_namer, PATHINFO_FILENAME);
+                $new_namer  = str_slug($new_namer);
+                $new_namer  = $new_namer . '.jpg';
+
+                Storage::disk('sftp')->put('public_html/images/destinos/banner-depto/' . $request->title . '/' . $new_name . '', fopen($image, 'r+'));
+                Storage::disk('sftp')->put('public_html/images/destinos/banner-depto/' . $request->title . '/' . $new_namer . '', fopen($imager, 'r+'));
+
+                $multiple1 = array(
+                    'name'          =>  $new_name,
+                    'title'         =>  $request->description,
+                    'country'       =>  $request->country,
+                    'city'          =>  $request->city,
+                    'description'   =>  $request->description,
+                    'size'          =>  '665x330',
+                    'type'          =>  '7',
+                );
+                Multimedia::create($multiple1);
+
+                $multiple2 = array(
+                    'name'          =>  $new_namer,
+                    'title'         =>  $request->description,
+                    'country'       =>  $request->country,
+                    'city'          =>  $request->city,
+                    'description'   =>  $request->description,
+                    'size'          =>  '307x480',
+                    'type'          =>  '7',
+                );
+                Multimedia::create($multiple2);
+
+                
+                $banner1 = Multimedia::where('name', $new_name)
+                    ->where('type', 7)->first();
+
+
+                $banner3 = Multimedia::where('name', $new_namer)
+                    ->where('type', 7)->first();
+
+                $banner = array(
+                    'img1'              =>  $banner1->id,
+                    'img2'              =>  $banner3->id,
+                    'banner_department' =>  $request->title,
+                    'travel_mt'         =>  $request->travel_mt,
+                    'days'              =>  $request->days,
+                    'price_from'        =>  $request->price_from,
+                    'departure'         =>  $request->departure,
+                    'alt'               =>  $request->description,
+                    'url'               =>  $request->url,
+                    'status'            => '1',
+                );
+                Banner::create($banner);
+
+                return response()->json(['success' => 'Banner agregado correctamente al listado']);
+
+                break;
+
             case "11";
                 $rules = array(
                     'department'      => 'required',
-                    'image'           => 'required|image|max:2048'
+                    'image'           => 'required|image|max:60'
                 );
 
                 $error = Validator::make($request->all(), $rules);
@@ -656,7 +991,7 @@ class UploadFilesController extends Controller
                     ->where('type', 11)->first();
 
 
-                Storage::disk('sftp')->put('public_html/images/destinos/home/megaofertases/recomend/' . $name . '', fopen($image, 'r+'));
+                Storage::disk('sftp')->put('public_html/images/recommend/' . $name . '', fopen($image, 'r+'));
 
 
                 $recom = array(
@@ -669,6 +1004,7 @@ class UploadFilesController extends Controller
                     'order_item'        =>  '0',
                 );
                 RecommendedDepartment::create($recom);
+
                 return response()->json(['success' => 'Se ha agregado correctamente']);
                 break;
 
@@ -678,7 +1014,7 @@ class UploadFilesController extends Controller
                     'descriptionfav'  => 'required',
                     'country'         => 'required',
                     'city'            => 'required',
-                    'image'           => 'required|image|max:2048'
+                    'image'           => 'required|image|max:70'
                 );
 
                 $error = Validator::make($request->all(), $rules);
@@ -689,7 +1025,7 @@ class UploadFilesController extends Controller
 
                 $image    = $request->file('image');
                 $new_name = $image->getClientOriginalName();
-                Storage::disk('sftp')->put('public_html/images/destinos/home/megaofertases/' . $new_name . '', fopen($image, 'r+'));
+                Storage::disk('sftp')->put('public_html/images/destinos/home/favoritos/' . $new_name . '', fopen($image, 'r+'));
 
                 $multiple = array(
                     'name'          =>  $new_name,
@@ -761,6 +1097,24 @@ class UploadFilesController extends Controller
     public function destrorecomended($id)
     {
         $data = RecommendedDepartment::findOrFail($id);
+        $data->delete();
+    }
+
+    public function destromain($id)
+    {
+        $data = MainCarousel::findOrFail($id);
+        $data->delete();
+    }
+
+    public function destrodeptos($id)
+    {
+        $data = CarouselTravel::findOrFail($id);
+        $data->delete();
+    }
+
+    public function destrolistado($id)
+    {
+        $data = Banner::findOrFail($id);
         $data->delete();
     }
 }

@@ -1,26 +1,32 @@
 @extends('adminlte::layouts.app')
 @section('main-content')
 <style>
-.select2-container{
-    width: 100% !important;
-}
+    .select2-container {
+        width: 100% !important;
+    }
 </style>
 <div class="panel panel-default">
     <div class="panel-body">
         <div class="panel-heading">
-            <h4><i class="fa fa-fw fa-list-alt"></i>OTOÑO INVIERNO</h4>
+            <h4><i class="fa fa-fw fa-image"></i>TEMPORADA OTOÑO INVIERNO</h4>
+        </div>
+    </div>
+
+    <div class="panel-body">
+        <div class="panel-heading">
+            <button type="button" name="create_record" id="create_record" class="btn btn-success btn-sm">Nuevo registro</button>
         </div>
     </div>
 </div>
 
-<div align="right">
-    <button type="button" name="create_record" id="create_record" class="btn btn-success btn-sm">Nuevo registro</button>
-</div>
+
 
 <table class="table table-bordered table-striped" id="temporada">
     <thead>
         <tr>
             <th>IMAGEN</th>
+            <th>REGULAR</th>
+            <th>BLOQUEO</th>
             <th>ORDEN</th>
             <th>ACTION</th>
         </tr>
@@ -66,7 +72,7 @@
 
                     <div class="form-group">
                         <div class="col-md-12">
-                            {!! Form::select('type',['5' => 'Otoño-Invierno (267x160)',],null, ['class' => 'form-control input', 'readonly' => true]) !!}
+                            {!! Form::select('type',['5' => 'Otoño-Invierno (267x160)',],null, ['class' => 'tipo form-control input', 'readonly' => true]) !!}
                         </div>
                     </div>
 
@@ -83,7 +89,7 @@
                             {{ Form::select('country', $countries, null,  array('class' => 'form-control input', 'id' => 'pais', 'placeholder' => 'Seleccione un Pais')) }}
                         </div>
                     </div>
-                    
+
                     <div class="form-group">
                         <div class="col-md-12">
                             {{ Form::select('city', $cities, null,  array('class' => 'form-control input', 'id' => 'ciudad', 'placeholder' => 'Seleccione una Ciudad')) }}
@@ -112,8 +118,8 @@
                 <h4 align="center" style="margin:0;">Deseas eliminar esta imagen?</h4>
             </div>
             <div class="modal-footer">
-                <button type="button" name="ok_button" id="ok_button" class="btn btn-danger">OK</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" name="ok_button" id="ok_button" class="btn btn-success">OK</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
             </div>
         </div>
     </div>
@@ -137,8 +143,16 @@
                     data: 'name',
                     name: 'multimedia.name',
                     render: function(data, type, row) {
-                        return "<img src=https://img3.mtmedia.com.mx/home/otono-invierno/" + data + " width='80' class='img-thumbnail'/>";
+                        return "<img src=https://img3.mtmedia.com.mx/home/otono-invierno/" + data + " width='120' class='img-thumbnail'/>";
                     }
+                },
+                {
+                    data: 'travel_mt',
+                    name: 'season_travels.travel_mt'
+                },
+                {
+                    data: 'bloqueo_mt',
+                    name: 'season_travels.bloqueo_mt'
                 },
                 {
                     data: 'order_item',

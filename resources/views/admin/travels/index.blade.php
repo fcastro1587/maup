@@ -13,7 +13,7 @@
 					<div class="col-md-6">
 						<div class="form-group">
 							@can('viaje.create')
-							<a href="{{route('viaje.create')}}" class="btn-dark pull-left">
+							<a href="{{route('viaje.create')}}" class="btn-xs btn-primary pull-left">
 								<i class="fa fa-fw fa-plus"></i>crear
 							</a>
 							@endcan
@@ -22,7 +22,7 @@
 				</div>
 			</div>
 			<div class="panel-body">
-				<table id="viajes" class="table table-hover tb-viaje">
+				<table id="viajes" class="table table-striped table-hover tb-viaje">
 					<thead>
 						<tr class="dark">
 							<th width="7">MT</th>

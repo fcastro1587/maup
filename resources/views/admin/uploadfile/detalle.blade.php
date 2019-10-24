@@ -1,20 +1,19 @@
 @extends('adminlte::layouts.app')
 @section('main-content')
-<style>
-.select2-container{
-    width: 100% !important;
-}
-</style>
 <div class="panel panel-default">
     <div class="panel-body">
         <div class="panel-heading">
-            <h4><i class="fa fa-fw fa-list-alt"></i>DETALLE Y MOSAICO</h4>
+            <h4><i class="fa fa-fw fa-image"></i>IMAGENES PARA DETALLE Y MOSAICO</h4>
+        </div>
+    </div>
+    
+    <div class="panel-body">
+        <div class="panel-heading">
+            <button type="button" name="create_record" id="create_record" class="btn btn-success btn-sm">Nuevo registro</button>
         </div>
     </div>
 </div>
-<div align="right">
-    <button type="button" name="create_record" id="create_record" class="btn btn-success btn-sm">Nuevo registro</button>
-</div>
+
 
 <table class="table table-bordered table-striped" id="fav">
     <thead>
@@ -68,7 +67,7 @@
 
                     <div class="form-group">
                         <div class="col-md-12">
-                            {!! Form::select('type',['1' => 'Detalle (844x474)',],null, ['class' => 'form-control input', 'readonly' => true]) !!}
+                            {!! Form::select('type',['1' => 'Detalle (844x474)',],null, ['class' => 'tipo form-control input', 'readonly' => true]) !!}
                         </div>
                     </div>
 
@@ -93,7 +92,7 @@
                     <div class="form-group" align="center">
                         <input type="hidden" name="action" id="action" />
                         <input type="hidden" name="hidden_id" id="hidden_id" />
-                        <input type="submit" name="action_button" id="action_button" class="btn btn-warning" value="Add" />
+                        <input type="submit" name="action_button" id="action_button" class="btn btn-primary" value="Add" />
                     </div>
                 </form>
             </div>
@@ -112,8 +111,8 @@
                 <h4 align="center" style="margin:0;">Deseas eliminar esta imagen?</h4>
             </div>
             <div class="modal-footer">
-                <button type="button" name="ok_button" id="ok_button" class="btn btn-danger">OK</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" name="ok_button" id="ok_button" class="btn btn-success">OK</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
             </div>
         </div>
     </div>
@@ -135,7 +134,7 @@
                     data: 'name',
                     name: 'multimedia.name',
                     render: function(data, type, row) {
-                        return "<img src=https://img1.mtmedia.com.mx/covers/" + data + " width='80' class='img-thumbnail'/>";
+                        return "<img src=https://img1.mtmedia.com.mx/covers/" + data + " width='190' class='img-thumbnail'/>";
                     }
                 },
                 {
@@ -153,9 +152,33 @@
                 }
             ],
             "lengthMenu": [
-				[7, 20, 50, -1],
-				[7, 20, 50, "Todos"]
-			],
+                [5, 15, 25, -1],
+                [5, 15, 25, "Todos"]
+            ],
+            "language": {
+                "sProcessing": "Procesando...",
+                "sLengthMenu": "Mostrar _MENU_ registros",
+                "sZeroRecords": "No se encontraron resultados",
+                "sEmptyTable": "Ningún dato disponible en esta tabla",
+                "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                "sInfoPostFix": "",
+                "sSearch": "Buscar:",
+                "sUrl": "",
+                "sInfoThousands": ",",
+                "sLoadingRecords": "Cargando...",
+                "oPaginate": {
+                    "sFirst": "Primero",
+                    "sLast": "Último",
+                    "sNext": "Siguiente",
+                    "sPrevious": "Anterior"
+                },
+                "oAria": {
+                    "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                    "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                }
+            }
         });
 
         //modal crear

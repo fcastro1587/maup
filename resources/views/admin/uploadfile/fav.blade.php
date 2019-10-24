@@ -1,25 +1,26 @@
 @extends('adminlte::layouts.app')
 @section('main-content')
-<style>
-.select2-container{
-    width: 100% !important;
-}
-</style>
 <div class="panel panel-default">
     <div class="panel-body">
         <div class="panel-heading">
-            <h4><i class="fa fa-fw fa-list-alt"></i>FAVORITOS</h4>
+            <h4><i class="fa fa-fw fa-image"></i>FAVORITOS</h4>
+        </div>
+    </div>
+
+    <div class="panel-body">
+        <div class="panel-heading">
+            <button type="button" name="create_record" id="create_record" class="btn btn-success btn-sm">Nuevo registro</button>
         </div>
     </div>
 </div>
-<div align="right">
-    <button type="button" name="create_record" id="create_record" class="btn btn-success btn-sm">Nuevo registro</button>
-</div>
+
 
 <table class="table table-bordered table-striped" id="fav">
     <thead>
         <tr>
             <th>IMAGEN</th>
+            <th>REGULAR</th>
+            <th>BLOQUEO</th>
             <th>ORDEN</th>
             <th>ACTION</th>
         </tr>
@@ -56,18 +57,17 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label col-md-4">SELECCIONA UNA IMAGEN: </label>
+                        <label class="col-md-4">SELECCIONE UNA IMAGEN</label>
                         <div class="col-md-8">
                             <input type="file" name="image" id="image" />
                             <span id="store_image"></span>
                         </div>
-                    </div>
-
-                    <div class="form-group">
+                        <br><br>
                         <div class="col-md-12">
-                            {!! Form::select('type',['12' => 'Favoritos (291x384)',],null, ['class' => 'form-control input', 'readonly' => true]) !!}
+                            {!! Form::select('type',['8' => 'panoramica fondo (1700x566)',],null, ['class' => 'form-control tipo', 'readonly' => true]) !!}
                         </div>
                     </div>
+
 
                     <div class="form-group">
                         <div class="col-md-12">
@@ -109,8 +109,8 @@
                 <h4 align="center" style="margin:0;">Deseas eliminar esta imagen?</h4>
             </div>
             <div class="modal-footer">
-                <button type="button" name="ok_button" id="ok_button" class="btn btn-danger">OK</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" name="ok_button" id="ok_button" class="btn btn-success">OK</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
             </div>
         </div>
     </div>
@@ -134,8 +134,16 @@
                     data: 'name',
                     name: 'multimedia.name',
                     render: function(data, type, row) {
-                        return "<img src=https://img3.mtmedia.com.mx/home/favoritos/" + data + " width='80' class='img-thumbnail'/>";
+                        return "<img src=https://img3.mtmedia.com.mx/home/favoritos/" + data + " width='120' class='img-thumbnail'/>";
                     }
+                },
+                {
+                    data: 'travel_mt',
+                    name: 'season_travels.travel_mt'
+                },
+                {
+                    data: 'bloqueo_mt',
+                    name: 'season_travels.bloqueo_mt'
                 },
                 {
                     data: 'order_item',

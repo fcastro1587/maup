@@ -1,10 +1,9 @@
 @extends('adminlte::layouts.app')
 @section('main-content')
-
 <div class="panel panel-default">
     <div class="panel-body">
         <div class="panel-heading">
-            <h4><i class="fa fa-fw fa-image"></i>IMAGEN RECOMENDADA</h4>
+            <h4><i class="fa fa-fw fa-image"></i>IMAGENES DESTACADOS POR DEPARTAMENTO</h4>
         </div>
     </div>
 
@@ -16,13 +15,15 @@
 </div>
 
 
-<table class="table table-bordered table-striped" id="recomendado">
+<table class="table table-bordered table-striped" id="dept">
     <thead>
         <tr>
             <th>IMAGEN</th>
             <th>REGULAR</th>
             <th>BLOQUEO</th>
             <th>DESTINO</th>
+            <th>ORDEN</th>
+            <th>ACTIVO</th>
             <th>ACTION</th>
         </tr>
     </thead>
@@ -42,34 +43,76 @@
 
                     <div class="form-group">
                         <div class="col-md-12">
-                            {{ Form::text('travel_mt', null, ['class' => 'form-control', 'id' => 'travel_mt', 'placeholder' => 'MT REGULAR']) }}
+                            {{ Form::text('travel_mt', null, ['class' => 'form-control', 'id' => 'travel_mt', 'placeholder' => 'REGULAR']) }}
                         </div>
                     </div>
 
                     <div class="form-group">
                         <div class="col-md-12">
-                            {{ Form::text('bloqueo_mt', null, ['class' => 'form-control', 'id' => 'bloqueo_mt', 'placeholder' => 'MT BLOQUEO']) }}
+                            {{ Form::text('bloqueo_mt', null, ['class' => 'form-control', 'id' => 'travel_mt', 'placeholder' => 'BLOQUEO']) }}
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <div class="col-md-12">
-                            {{Form::select('department', $department, null, ['class' => 'form-control img2', 'placeholder'=>'Seleccionar departamento' , 'id' => 'department']) }}
-                        </div>
-                    </div>
 
                     <div class="form-group">
-                        <label class="control-label col-md-4">Imagen Recomendada: </label>
+                        <label class="col-md-4">SELECCIONAR IMAGEN</label>
                         <div class="col-md-8">
                             <input type="file" name="image" id="image" />
                             <span id="store_image"></span>
                         </div>
                     </div>
 
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            {{ Form::textarea('description', null, ['class' => 'form-control', 'id' => 'description', 'placeholder' => 'DESCRIPCIÓN DE LA IMAGEN']) }}
+                        </div>
+                    </div>
 
                     <div class="form-group">
                         <div class="col-md-12">
-                            {!! Form::select('type',['11' => 'recomendado (324x152)',],null, ['class' => 'tipo form-control input', 'readonly' => true]) !!}
+                            {{ Form::select('country', $countries, null,  array('class' => 'form-control country input', 'id' => 'pais', 'placeholder' => 'Seleccione un Pais')) }}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            {{ Form::select('city', $cities, null,  array('class' => 'form-control city input', 'id' => 'ciudad', 'placeholder' => 'Seleccione una Ciudad')) }}
+                        </div>
+                    </div>
+
+                    <div class=" col-md-12">
+                        <div class="form-group">
+                            {!! Form::select('title', [null => 'Seleccione un Destino'] +
+                            [
+                            'europa' => 'Europa',
+                            'canada' => 'Canadá',
+                            'usa' => 'Estados Unidos',
+                            'mexico' => 'México',
+                            'sudamerica' => 'Sudamérica',
+                            'camerica' => 'Centroamerica',
+                            'caribe' => 'Caribe',
+                            'pacifico' => 'Pacifico',
+                            'moriente' => 'Medio Oriente',
+                            'asia' => 'Asia',
+                            'africa' => 'Africa',
+                            'edeportivo' => 'Eventos Especiales',
+                            'cruceros' => 'Cruceros',
+                            'exoticos' => 'Exoticos',
+                            'jviajera' => 'Juventud Viajera',
+                            ],null, ['class' => 'form-control input img2']) !!}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            {{ Form::text('order', null, ['class' => 'form-control', 'id' => 'travel_mt', 'placeholder' => 'ORDEN']) }}
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            {!! Form::select('type',['3' => 'Destacado por depto (230x300)',],null, ['class' => 'tipo form-control input', 'readonly' => true]) !!}
                         </div>
                     </div>
 
@@ -79,7 +122,6 @@
                         <input type="hidden" name="hidden_id" id="hidden_id" />
                         <input type="submit" name="action_button" id="action_button" class="btn btn-primary" value="Add" />
                     </div>
-
                 </form>
             </div>
         </div>
@@ -109,31 +151,45 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
 <script>
     $(document).ready(function() {
-        $('#recomendado').DataTable({
+        $('#dept').DataTable({
             processing: true,
             serverSide: true,
             info: false,
             ajax: {
-                url: "{{ route('uploadfiles.indexrecommended') }}",
+                url: "{{ route('uploadfiles.indexdeptos') }}",
             },
             columns: [{
-                    data: 'name',
-                    name: 'multimedia.name',
                     render: function(data, type, row) {
-                        return "<img src=https://img2.mtmedia.com.mx/recommend/" + data + " width='250' class='img-thumbnail'/>";
+                        return "<img src=https://img3.mtmedia.com.mx/promos/" + row.carousel_travel_code + '/' + row.name + " width='130' class='img-thumbnail'/>";
                     }
                 },
                 {
-                    data: 'travel_mt',
-                    name: 'recommended_departments.travel_mt',
+                    data: 'carousel_travel_mt',
+                    name: 'carousel_travels.carousel_travel_mt',
                 },
                 {
                     data: 'bloqueo_mt',
-                    name: 'recommended_departments.bloqueo_mt',
+                    name: 'carousel_travels.bloqueo_mt',
                 },
                 {
-                    data: 'code_department',
-                    name: 'recommended_departments.code_department',
+                    data: 'carousel_travel_code',
+                    name: 'carousel_travels.carousel_travel_code',
+                },
+                {
+                    data: 'order',
+                    name: 'carousel_travels.order',
+                },
+                {
+                    data: 'active',
+                    name: 'carousel_travels.active',
+                    render: function(data) {
+                        if(data) {
+                  return '<small class="label bg-green">Activo</small>'
+                }
+                else {
+                  return '<small class="label bg-red">Inactivo</small>'
+                }
+                    }
                 },
                 {
                     data: 'btn',
@@ -141,6 +197,34 @@
                     orderable: false
                 }
             ],
+            "lengthMenu": [
+                [30, 40, 50, -1],
+                [30, 40, 50, "Todos"]
+            ],
+            "language": {
+                "sProcessing": "Procesando...",
+                "sLengthMenu": "Mostrar _MENU_ registros",
+                "sZeroRecords": "No se encontraron resultados",
+                "sEmptyTable": "Ningún dato disponible en esta tabla",
+                "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                "sInfoPostFix": "",
+                "sSearch": "Buscar:",
+                "sUrl": "",
+                "sInfoThousands": ",",
+                "sLoadingRecords": "Cargando...",
+                "oPaginate": {
+                    "sFirst": "Primero",
+                    "sLast": "Último",
+                    "sNext": "Siguiente",
+                    "sPrevious": "Anterior"
+                },
+                "oAria": {
+                    "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                    "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                }
+            }
         });
 
         //modal crear
@@ -174,7 +258,7 @@
                         if (data.success) {
                             html = '<div class="alert alert-success">' + data.success + '</div>';
                             $('#sample_form')[0].reset();
-                            $('#recomendado').DataTable().ajax.reload();
+                            $('#dept').DataTable().ajax.reload();
                         }
                         $('#form_result').html(html);
                     }
@@ -192,7 +276,7 @@
 
         $('#ok_button').click(function() {
             $.ajax({
-                url: "{{url('upload-files/destrorecomended')}}/" + user_id,
+                url: "{{url('upload-files/destrodeptos')}}/" + user_id,
                 beforeSend: function() {
                     $('#ok_button').text('Deleting...');
                     $(this).fadeOut();
@@ -200,12 +284,14 @@
                 success: function(data) {
                     setTimeout(function() {
                         $('#confirmModal').modal('hide');
-                        $('#recomendado').DataTable().ajax.reload();
+                        $('#dept').DataTable().ajax.reload();
                     }, 2000);
                 }
             })
         });
 
+        $(".country").select2();
+        $(".city").select2();
         $(".img2").select2();
 
     }); //FIN DOCUMENTO JQUERY

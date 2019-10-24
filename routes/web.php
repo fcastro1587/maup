@@ -62,34 +62,45 @@ Route::get('files/{var}/createupload',     'Admin\FilesController@createupload')
 
 
 //images
-Route::resource('upload-files',                   'Admin\UploadFilesController');  //bueno
-Route::get('upload-files/megaofertas/{var}',      'Admin\UploadFilesController@megaofertas')->name('upload-files.megaofertas');  //megaofertas
+Route::resource('upload-files',               'Admin\UploadFilesController');  //bueno
+Route::get('upload-files/megaofertas/{var}',  'Admin\UploadFilesController@megaofertas')->name('upload-files.megaofertas');  //megaofertas
 
-Route::get('detalle',                             'Admin\UploadFilesController@indexdetalle')->name('uploadfiles.indexdetalle');
-Route::get('upload-files/detalle/{var}',          'Admin\UploadFilesController@detalle')->name('upload-files.detalle');  //detalle
+Route::get('detalle',                         'Admin\UploadFilesController@indexdetalle')->name('uploadfiles.indexdetalle');
+Route::get('upload-files/detalle/{var}',      'Admin\UploadFilesController@detalle')->name('upload-files.detalle');  //detalle
 
-Route::get('panoramic',                             'Admin\UploadFilesController@indexpanoramic')->name('uploadfiles.indexpanoramic');
-Route::get('upload-files/panoramic/{var}',          'Admin\UploadFilesController@panoramic')->name('upload-files.panoramic');  //panoramic
+Route::get('homeslider',                      'Admin\UploadFilesController@indexhomeslider')->name('uploadfiles.indexhomeslider');
+Route::get('upload-files/homeslider/{var}',   'Admin\UploadFilesController@homeslider')->name('upload-files.homeslider');  //slider main
 
-Route::get('temporada',                           'Admin\UploadFilesController@indextemporada')->name('uploadfiles.indextemporada');
-Route::get('upload-files/temporadas/{var}',       'Admin\UploadFilesController@temporadas')->name('upload-files.temporadas');  //temporada 
+Route::get('panoramic',                       'Admin\UploadFilesController@indexpanoramic')->name('uploadfiles.indexpanoramic');
+Route::get('upload-files/panoramic/{var}',    'Admin\UploadFilesController@panoramic')->name('upload-files.panoramic');  //panoramic
 
-Route::get('blq',                          'Admin\UploadFilesController@indexblq')->name('uploadfiles.indexblq');
-Route::get('upload-files/blq/{var}',       'Admin\UploadFilesController@blq')->name('upload-files.blq');  //bloqueo
+Route::get('temporada',                       'Admin\UploadFilesController@indextemporada')->name('uploadfiles.indextemporada');
+Route::get('upload-files/temporadas/{var}',   'Admin\UploadFilesController@temporadas')->name('upload-files.temporadas');  //temporada 
 
-Route::get('fav',                           'Admin\UploadFilesController@indexfav')->name('uploadfiles.indexfav');
-Route::get('upload-files/fav/{var}',       'Admin\UploadFilesController@fav')->name('upload-files.fav');  //favoritos
+Route::get('blq',                             'Admin\UploadFilesController@indexblq')->name('uploadfiles.indexblq');
+Route::get('upload-files/blq/{var}',          'Admin\UploadFilesController@blq')->name('upload-files.blq');  //bloqueo
 
-Route::get('recommended',                           'Admin\UploadFilesController@indexrecommended')->name('uploadfiles.indexrecommended');
-Route::get('upload-files/recommended/{var}',       'Admin\UploadFilesController@recommended')->name('upload-files.recommended');  //favoritos
+Route::get('fav',                             'Admin\UploadFilesController@indexfav')->name('uploadfiles.indexfav');
+Route::get('upload-files/fav/{var}',          'Admin\UploadFilesController@fav')->name('upload-files.fav');  //favoritos
+
+Route::get('listado',                         'Admin\UploadFilesController@indexlistado')->name('uploadfiles.indexlistado');
+Route::get('upload-files/listado/{var}',      'Admin\UploadFilesController@listado')->name('upload-files.listado');  //listado
+
+Route::get('recommended',                     'Admin\UploadFilesController@indexrecommended')->name('uploadfiles.indexrecommended');
+Route::get('upload-files/recommended/{var}',  'Admin\UploadFilesController@recommended')->name('upload-files.recommended');  //recomendados
+
+Route::get('deptos',                          'Admin\UploadFilesController@indexdeptos')->name('uploadfiles.indexdeptos');
+Route::get('upload-files/deptos/{var}',       'Admin\UploadFilesController@deptos')->name('upload-files.deptos');  //departamentos
 });
 
 Route::get('upload-files/destro/{id}',            'Admin\UploadFilesController@destro')->name('upload-files.destro');//para temporadas travel
 Route::get('upload-files/destromt/{id}',          'Admin\UploadFilesController@destromt')->name('upload-files.destromt');//para detalle
 Route::get('upload-files/destropanoramic/{id}',   'Admin\UploadFilesController@destropanoramic')->name('upload-files.destropanoramic');//para detalle
 Route::get('upload-files/destrorecomended/{id}',  'Admin\UploadFilesController@destrorecomended')->name('upload-files.destrorecomended');//para detalle
-
-
+Route::get('upload-files/destromain/{id}',        'Admin\UploadFilesController@destromain')->name('upload-files.destromain');//para slider principal
+Route::get('upload-files/destrolist/{id}',        'Admin\UploadFilesController@destrolist')->name('upload-files.destrolist');//para Listado
+Route::get('upload-files/destrodeptos/{id}',        'Admin\UploadFilesController@destrodeptos')->name('upload-files.destrodeptos');//para Listado
+Route::get('upload-files/destrolistado/{id}',        'Admin\UploadFilesController@destrolistado')->name('upload-files.destrolistado');//para Listado
 
 
 //ajax datatables viaje
@@ -101,7 +112,6 @@ Route::get('select/dataremote-load',  'Admin\HomeController@load')->name('load.l
 Route::get('select/dataremote',       'Admin\HomeController@img')->name('img.img');
 Route::get('offers/dataoffer',        'Admin\OffersController@dataoffer')->name('dataoffer.dataoffer');
 Route::get('city/datacity',           'Admin\CityController@datacity')->name('datacity.datacity');
-
 
 
 //envio de tipo de cambio

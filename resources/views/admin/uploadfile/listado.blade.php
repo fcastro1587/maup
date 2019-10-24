@@ -3,7 +3,7 @@
 <div class="panel panel-default">
     <div class="panel-body">
         <div class="panel-heading">
-            <h4><i class="fa fa-fw fa-image"></i>PANORAMICA POR DEPARTAMENTO</h4>
+            <h4><i class="fa fa-fw fa-image"></i>LISTADO POR DEPARTAMENTO</h4>
         </div>
     </div>
 
@@ -15,14 +15,12 @@
 </div>
 
 
-<table class="table table-bordered table-striped" id="panoramic">
+<table class="table table-bordered table-striped" id="listado">
     <thead>
         <tr>
-            <th>IMAGEN</th>
-            <th>REGULAR</th>
-            <th>BLOQUEO</th>
+            <th>IMAGEN MOSAICO</th>
             <th>DESTINO</th>
-            <th>ORDEN</th>
+            <th>STATUS</th>
             <th>ACTION</th>
         </tr>
     </thead>
@@ -41,39 +39,24 @@
                     @csrf
 
                     <div class="form-group">
-                        <div class="col-md-12">
-                            {{ Form::text('travel_mt', null, ['class' => 'form-control', 'id' => 'travel_mt', 'placeholder' => 'MT REGULAR']) }}
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <div class="col-md-12">
-                            {{ Form::text('bloqueo_mt', null, ['class' => 'form-control', 'id' => 'bloqueo_mt', 'placeholder' => 'MT BLOQUEO']) }}
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="control-label col-md-4">PANORAMICA: </label>
-                        <div class="col-md-8">
+                        <div class="col-md-6">
                             <input type="file" name="image" id="image" />
                             <span id="store_image"></span>
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label class="control-label col-md-4">RESPONSIVE: </label>
-                        <div class="col-md-8">
-                            <input type="file" name="imageresponsive" id="imageresponsive" />
-                            <span id="store_image"></span>
+                        <div class="col-md-6">
+                            {!! Form::select('type1',['7' => 'Mosaico (665X330)',],null, ['class' => 'tipo form-control input', 'readonly' => true]) !!}
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <div class="col-md-12">
-                            {!! Form::select('type',[
-                                '2'       => 'Panoramica por destino (1918x300)',
-                                'section' => 'Panoramica por sección (1918x300)'
-                                ],null, ['class' => 'form-control input']) !!}
+                        <div class="col-md-6">
+                            <input type="file" name="imageresponsive" id="imageresponsive" />
+                            <span id="store_image"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            {!! Form::select('type3',['7' => 'Listado (324X380)',],null, ['class' => 'tipo form-control input', 'readonly' => true]) !!}
                         </div>
                     </div>
 
@@ -99,6 +82,64 @@
                             ],null, ['class' => 'form-control input img2']) !!}
                         </div>
                     </div>
+
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            {{ Form::text('travel_mt', null, ['class' => 'form-control', 'id' => 'travel_mt', 'placeholder' => 'MT']) }}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            {{ Form::text('days', null, ['class' => 'form-control', 'id' => 'days', 'placeholder' => 'días']) }}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            {{ Form::text('price_from', null, ['class' => 'form-control', 'id' => 'price_from', 'placeholder' => 'PRECIO']) }}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            {{ Form::date('departure', null, ['class' => 'form-control', 'id' => 'departure', 'placeholder' => 'SALIDA']) }}
+                        </div>
+                    </div>
+
+                    
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            {{ Form::select('country', $countries, null,  array('class' => 'form-control country input', 'id' => 'pais', 'placeholder' => 'Seleccione un Pais')) }}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            {{ Form::select('city', $cities, null,  array('class' => 'form-control city input', 'id' => 'ciudad', 'placeholder' => 'Seleccione una Ciudad')) }}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            {{ Form::textarea('description', null, ['class' => 'form-control', 'id' => 'description', 'placeholder' => 'DESCRIPCION']) }}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            {{ Form::text('url', null, ['class' => 'form-control', 'id' => 'url', 'placeholder' => 'URL']) }}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            {!! Form::select('type',[
+                            '7' => 'Imagenes en listado de destino'
+                            ],null, ['class' => 'form-control tipo input', 'readonly' => true]) !!}
+                        </div>
+                    </div>
+                    
 
                     <br />
                     <div class="form-group" align="center">
@@ -135,35 +176,35 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
 <script>
     $(document).ready(function() {
-        $('#panoramic').DataTable({
+        $('#listado').DataTable({
             processing: true,
             serverSide: true,
             info: false,
             ajax: {
-                url: "{{ route('uploadfiles.indexpanoramic') }}",
+                url: "{{ route('uploadfiles.indexlistado') }}",
             },
             columns: [{
                     data: 'name',
                     name: 'multimedia.name',
                     render: function(data, type, row) {
-                        return "<img src=https://img1.mtmedia.com.mx/deptos/" + data + " width='350' class='img-thumbnail'/>";
+                        return "<img src=https://img3.mtmedia.com.mx/banner-depto/europa/" + data + " width='200' class='img-thumbnail'/>";
                     }
                 },
                 {
-                    data: 'header_mt',
-                    name: 'headers.header_mt',
+                    data: 'banner_department',
+                    name: 'banners.banner_department',
                 },
                 {
-                    data: 'bloqueo_mt',
-                    name: 'headers.bloqueo_mt',
-                },
-                {
-                    data: 'header_department',
-                    name: 'headers.header_department',
-                },
-                {
-                    data: 'order',
-                    name: 'headers.order',
+                    data: 'status',
+                    name: 'banners.status',
+                    render: function(data) {
+                        if(data) {
+                  return '<small class="label bg-green">Activo</small>'
+                }
+                else {
+                  return '<small class="label bg-red">Inactivo</small>'
+                }
+                    }
                 },
                 {
                     data: 'btn',
@@ -232,7 +273,7 @@
                         if (data.success) {
                             html = '<div class="alert alert-success">' + data.success + '</div>';
                             $('#sample_form')[0].reset();
-                            $('#panoramic').DataTable().ajax.reload();
+                            $('#listado').DataTable().ajax.reload();
                         }
                         $('#form_result').html(html);
                     }
@@ -250,21 +291,23 @@
 
         $('#ok_button').click(function() {
             $.ajax({
-                url: "{{url('upload-files/destropanoramic')}}/" + user_id,
+                url: "{{url('upload-files/destrolistado')}}/" + user_id,
                 beforeSend: function() {
-                    $('#ok_button').text('Deleting...');
+                    $('#ok_button').text('Deleting...');    
                     $(this).fadeOut();
                 },
                 success: function(data) {
                     setTimeout(function() {
                         $('#confirmModal').modal('hide');
-                        $('#panoramic').DataTable().ajax.reload();
+                        $('#listado').DataTable().ajax.reload();
                     }, 2000);
                 }
             })
         });
 
         $(".img2").select2();
+        $(".country").select2();
+        $(".city").select2();
 
     }); //FIN DOCUMENTO JQUERY
 </script>
