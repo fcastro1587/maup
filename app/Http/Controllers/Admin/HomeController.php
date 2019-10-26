@@ -48,7 +48,17 @@ class HomeController extends Controller
     $depto =  Auth::user()->department;
 
     $viajes = Travel
-      ::select('id', 'mt', 'name', 'department', 'validity');
+      ::join('departments', 'departments.code', '=', 'travels.department')
+      ->select(
+        'travels.id', 
+        'travels.mt', 
+        'travels.days',
+        'travels.nights',
+        'travels.name as name_mt', 
+        'travels.department', 
+        'travels.validity',
+        'departments.name'
+      );
 
     if ($depto <> 'admin') {
       $viajes->where('department', '=', $depto);
@@ -106,27 +116,27 @@ class HomeController extends Controller
     $airlines        = Airline::all();
     $countries       = Country::all();
     $multimedia      = Multimedia::select('*')
-                                  ->where('type', '=', 1)
-                                  ->orWhere('video_type', '=', 1)
-                                  ->orWhere('video_type', '=', 2)
-                                  ->get();
+      ->where('type', '=', 1)
+      ->orWhere('video_type', '=', 1)
+      ->orWhere('video_type', '=', 2)
+      ->get();
 
     $cities          = City::all();
     $season          = Season::select('*')
-                              ->where('code_season', '<>', 'BLO')
-                              ->where('code_season', '<>', 'CONCVIVO')
-                              ->where('code_season', '<>', 'DEPVIVO')
-                              ->where('code_season', '<>', 'EDE')
-                              ->where('code_season', '<>', 'EURNAVIDAD')
-                              ->where('code_season', '<>', 'INV')
-                              ->where('code_season', '<>', 'MEJVIVO')
-                              ->where('code_season', '<>', 'NAVIDAD')
-                              ->where('code_season', '<>', 'OTO')
-                              ->where('code_season', '<>', 'RECVIVO')
-                              ->where('code_season', '<>', 'SEM')
-                              ->where('code_season', '<>', 'TEAVIVO')
-                              ->where('code_season', '<>', 'TICKVIVO')
-                              ->get();
+      ->where('code_season', '<>', 'BLO')
+      ->where('code_season', '<>', 'CONCVIVO')
+      ->where('code_season', '<>', 'DEPVIVO')
+      ->where('code_season', '<>', 'EDE')
+      ->where('code_season', '<>', 'EURNAVIDAD')
+      ->where('code_season', '<>', 'INV')
+      ->where('code_season', '<>', 'MEJVIVO')
+      ->where('code_season', '<>', 'NAVIDAD')
+      ->where('code_season', '<>', 'OTO')
+      ->where('code_season', '<>', 'RECVIVO')
+      ->where('code_season', '<>', 'SEM')
+      ->where('code_season', '<>', 'TEAVIVO')
+      ->where('code_season', '<>', 'TICKVIVO')
+      ->get();
     return view('admin/travels.create', compact('rooms', 'currencies', 'airlines', 'countries', 'cities', 'multimedia', 'season'));
   }
 
@@ -169,27 +179,27 @@ class HomeController extends Controller
     $airlines        = Airline::all();
     $countries       = Country::all();
     $multimedia      = Multimedia::select('*')
-                                  ->where('type', '=', 1)
-                                  ->orWhere('video_type', '=', 1)
-                                  ->orWhere('video_type', '=', 2)
-                                  ->get();
+      ->where('type', '=', 1)
+      ->orWhere('video_type', '=', 1)
+      ->orWhere('video_type', '=', 2)
+      ->get();
 
     $cities          = City::all();
     $season          = Season::select('*')
-                              ->where('code_season', '<>', 'BLO')
-                              ->where('code_season', '<>', 'CONCVIVO')
-                              ->where('code_season', '<>', 'DEPVIVO')
-                              ->where('code_season', '<>', 'EDE')
-                              ->where('code_season', '<>', 'EURNAVIDAD')
-                              ->where('code_season', '<>', 'INV')
-                              ->where('code_season', '<>', 'MEJVIVO')
-                              ->where('code_season', '<>', 'NAVIDAD')
-                              ->where('code_season', '<>', 'OTO')
-                              ->where('code_season', '<>', 'RECVIVO')
-                              ->where('code_season', '<>', 'SEM')
-                              ->where('code_season', '<>', 'TEAVIVO')
-                              ->where('code_season', '<>', 'TICKVIVO')
-                              ->get();
+      ->where('code_season', '<>', 'BLO')
+      ->where('code_season', '<>', 'CONCVIVO')
+      ->where('code_season', '<>', 'DEPVIVO')
+      ->where('code_season', '<>', 'EDE')
+      ->where('code_season', '<>', 'EURNAVIDAD')
+      ->where('code_season', '<>', 'INV')
+      ->where('code_season', '<>', 'MEJVIVO')
+      ->where('code_season', '<>', 'NAVIDAD')
+      ->where('code_season', '<>', 'OTO')
+      ->where('code_season', '<>', 'RECVIVO')
+      ->where('code_season', '<>', 'SEM')
+      ->where('code_season', '<>', 'TEAVIVO')
+      ->where('code_season', '<>', 'TICKVIVO')
+      ->get();
 
     $section         = Section::all();
     $tour            = Tour::all();

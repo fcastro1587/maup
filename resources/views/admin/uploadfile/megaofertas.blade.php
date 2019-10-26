@@ -38,41 +38,37 @@
                 <form method="post" id="sample_form" class="form-horizontal" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
-                        <label class="control-label col-md-4">MT REGULAR</label>
-                        <div class="col-md-8">
-                            {{ Form::text('travel_mt', null, ['class' => 'form-control', 'id' => 'travel_mt']) }}
+                        <div class="col-md-12">
+                            {{ Form::text('travel_mt', null, ['class' => 'form-control', 'id' => 'travel_mt', 'placeholder' => 'MT REGULAR']) }}
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-4">MT BLOQUEO: </label>
-                        <div class="col-md-8">
-                            {{ Form::text('bloqueo_mt', null, ['class' => 'form-control', 'id' => 'bloqueo_mt']) }}
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="control-label col-md-4">ORDEN: </label>
-                        <div class="col-md-8">
-                            {{ Form::text('order_item', null, ['class' => 'form-control', 'id' => 'order_item']) }}
+                        <div class="col-md-12">
+                            {{ Form::text('bloqueo_mt', null, ['class' => 'form-control', 'id' => 'bloqueo_mt', 'placeholder' => 'MT BLOQUEO']) }}
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label col-md-4">ELIGE EL DESTINO: </label>
-                        <div class="col-md-8">
-                            {!! Form::select('multimedia_id_1', [null => 'Seleccione un Destino'] +
-                            [
-                            '2808' => 'Estados Unidos',
-                            '2809' => 'Europa',
-                            '2810' => 'Sudamerica',
-                            '2811' => 'México',
-                            '2812' => 'Canadá',
-                            '2813' => 'Caribe',
-                            '2814' => 'Medio Oriente',
-                            '2815' => 'Asia',
-                            '2816' => 'cruceros',
-                            '2817' => 'Juventud viajera',
-                            ],null, ['class' => 'form-control img6']) !!}
+                        <div class="col-md-12">
+                            {{ Form::text('order_item', null, ['class' => 'form-control', 'id' => 'order_item', 'placeholder' => 'ORDEN']) }}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            {{ Form::textarea('description', null, ['class' => 'form-control', 'id' => 'description', 'placeholder' => 'DESCRIPCIÓN DE LA IMAGEN']) }}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            {{ Form::select('country', $countries, null,  array('class' => 'form-control country input', 'id' => 'pais', 'placeholder' => 'Seleccione un Pais')) }}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            {{ Form::select('city', $cities, null,  array('class' => 'form-control city input', 'id' => 'ciudad', 'placeholder' => 'Seleccione una Ciudad')) }}
                         </div>
                     </div>
 
@@ -85,8 +81,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label col-md-4">TIPO DE IMAGEN: </label>
-                        <div class="col-md-8">
+                       <div class="col-md-12">
                             {!! Form::select('type',['4' => 'Mega Ofertas (320x400)',],null, ['class' => 'tipo form-control input', 'readonly' => true]) !!}
                         </div>
                     </div>
@@ -130,7 +125,6 @@
             processing: true,
             serverSide: true,
             bFilter: false,
-            paging: false,
             info: false,
             ajax: {
                 url: "{{ route('upload-files.index') }}",

@@ -91,7 +91,7 @@
 
                     <div class="form-group">
                         <div class="col-md-12">
-                            {{ Form::text('days', null, ['class' => 'form-control', 'id' => 'days', 'placeholder' => 'días']) }}
+                            {{ Form::text('days', null, ['class' => 'form-control', 'id' => 'days', 'placeholder' => 'DÍAS']) }}
                         </div>
                     </div>
 
@@ -107,7 +107,7 @@
                         </div>
                     </div>
 
-                    
+
                     <div class="form-group">
                         <div class="col-md-12">
                             {{ Form::select('country', $countries, null,  array('class' => 'form-control country input', 'id' => 'pais', 'placeholder' => 'Seleccione un Pais')) }}
@@ -122,7 +122,7 @@
 
                     <div class="form-group">
                         <div class="col-md-12">
-                            {{ Form::textarea('description', null, ['class' => 'form-control', 'id' => 'description', 'placeholder' => 'DESCRIPCION']) }}
+                            {{ Form::textarea('description', null, ['class' => 'form-control', 'id' => 'description', 'placeholder' => 'DESCRIPCIÓN']) }}
                         </div>
                     </div>
 
@@ -139,7 +139,7 @@
                             ],null, ['class' => 'form-control tipo input', 'readonly' => true]) !!}
                         </div>
                     </div>
-                    
+
 
                     <br />
                     <div class="form-group" align="center">
@@ -184,10 +184,8 @@
                 url: "{{ route('uploadfiles.indexlistado') }}",
             },
             columns: [{
-                    data: 'name',
-                    name: 'multimedia.name',
                     render: function(data, type, row) {
-                        return "<img src=https://img3.mtmedia.com.mx/banner-depto/europa/" + data + " width='200' class='img-thumbnail'/>";
+                        return "<img src=https://img3.mtmedia.com.mx/banner-depto/" + row.banner_department + '/' + row.name + " width='200' class='img-thumbnail'/>";
                     }
                 },
                 {
@@ -198,12 +196,11 @@
                     data: 'status',
                     name: 'banners.status',
                     render: function(data) {
-                        if(data) {
-                  return '<small class="label bg-green">Activo</small>'
-                }
-                else {
-                  return '<small class="label bg-red">Inactivo</small>'
-                }
+                        if (data) {
+                            return '<small class="label bg-green">Activo</small>'
+                        } else {
+                            return '<small class="label bg-red">Inactivo</small>'
+                        }
                     }
                 },
                 {
@@ -293,7 +290,7 @@
             $.ajax({
                 url: "{{url('upload-files/destrolistado')}}/" + user_id,
                 beforeSend: function() {
-                    $('#ok_button').text('Deleting...');    
+                    $('#ok_button').text('Deleting...');
                     $(this).fadeOut();
                 },
                 success: function(data) {

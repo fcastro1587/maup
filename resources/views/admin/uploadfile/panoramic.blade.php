@@ -71,9 +71,8 @@
                     <div class="form-group">
                         <div class="col-md-12">
                             {!! Form::select('type',[
-                                '2'       => 'Panoramica por destino (1918x300)',
-                                'section' => 'Panoramica por sección (1918x300)'
-                                ],null, ['class' => 'form-control input']) !!}
+                                '2'       => 'Panoramica por destino (1918x300)'
+                                ],null, ['class' => 'form-control tipo input']) !!}
                         </div>
                     </div>
 

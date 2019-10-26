@@ -27,6 +27,8 @@
 						<tr class="dark">
 							<th width="7">MT</th>
 							<th>NOMBRE</th>
+							<th>DÍAS</th>
+							<th>NOCHES</th>
 							<th>DEPARTAMENTO</th>
 							<th>VIGENCIA</th>
 							<th class="text-right">ACCIONES</th>
@@ -36,6 +38,8 @@
 						<tr class="dark">
 							<th width="7">MT</th>
 							<th>NOMBRE</th>
+							<th>DÍAS</th>
+							<th>NOCHES</th>
 							<th>DEPARTAMENTO</th>
 							<th>VIGENCIA</th>
 							<th class="text-right">ACCIONES</th>
@@ -55,16 +59,28 @@
 			"serverSide": true,
 			"ajax": "{{ url('role/viaje') }}",
 			"columns": [{
-					data: 'mt'
+					data: 'mt',
+					name: 'travels.mt'
 				},
 				{
-					data: 'name'
+					data: 'name_mt',
+					name: 'travels.name'
 				},
 				{
-					data: 'department'
+					data: 'days',
+					name: 'travels.days'
 				},
 				{
-					data: 'validity'
+					data: 'nights',
+					name: 'travels.nights'
+				},
+				{
+					data: 'name',
+					name: 'departments.name'
+				},
+				{
+					data: 'validity',
+					name: 'travels.validity'
 				},
 				{
 					data: 'btn'

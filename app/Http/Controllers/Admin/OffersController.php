@@ -27,8 +27,16 @@ class OffersController extends Controller
 
   public function dataoffer()
   {
-    $offer = Offer::
-             select('id', 'bloqueo_mt', 'department_code', 'order');
+    $offer = Offer
+             ::join('departments', 'offers.department_code', '=', 'departments.code')
+             ->select(
+               'offers.id', 
+               'offers.bloqueo_mt', 
+               'offers.department_code', 
+               'offers.order',
+               'departments.name'
+              )
+              ->orderby('offers.order', 'asc');
 
     return datatables()
       ->eloquent($offer)

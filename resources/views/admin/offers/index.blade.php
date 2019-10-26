@@ -48,13 +48,16 @@
 			"serverSide": true,
 			"ajax": "{{ url('offers/dataoffer') }}",
 			"columns": [{
-					data: 'bloqueo_mt'
+					data: 'bloqueo_mt',
+					name: 'offers.bloqueo_mt'
 				},
 				{
-					data: 'department_code'
+					data: 'name',
+					name: 'departments.name'
 				},
 				{
-					data: 'order'
+					data: 'order',
+					name: 'offers.order'
 				},
 				{
 					data: 'btn'
