@@ -13,7 +13,7 @@
 					<div class="col-md-6">
 						<div class="form-group">
 							@can('tours.create')
-							<a href="{{route('tours.create')}}" class="btn-dark pull-left">
+							<a href="{{route('tours.create')}}" class="btn-xs btn-primary pull-left">
 								<i class="fa fa-fw fa-plus"></i>crear
 							</a>
 							@endcan
@@ -48,8 +48,8 @@
 
 							<td width="10px">
 								@can('tours.edit')
-								<a href="{{ route('tours.edit', $to->id) }}" class="btn btn-sm btn-success"><i class="fa fa-fw fa-pencil"></i>
-									editar
+								<a href="{{ route('tours.edit', $to->id) }}" class="btn btn-xs btn-success"><i class="fa fa-fw fa-pencil"></i>
+									
 								</a>
 								@endcan
 							</td>
@@ -57,8 +57,8 @@
 							<td width="10px">
 								@can('tours.destroy')
 								{!! Form::open(['route' => ['tours.destroy', $to->id], 'method' => 'DELETE']) !!}
-								<button type="submit" onclick="return confirm('¿Estas seguro que desea eliminar este Tour?')" class="btn btn-sm btn-danger">
-									<i class="fa fa-fw fa-remove"></i>Eliminar
+								<button type="submit" onclick="return confirm('¿Estas seguro que desea eliminar este Tour?')" class="btn btn-xs btn-danger">
+									<i class="fa fa-fw fa-remove"></i>
 								</button>
 								{!! Form::close() !!}
 								@endcan
@@ -78,8 +78,8 @@
 	$(document).ready(function() {
 		$('#tours').DataTable({
 			"lengthMenu": [
-				[15, 30, 50, -1],
-				[15, 30, 50, "Todos"]
+				[10, 30, 50, -1],
+				[10, 30, 50, "Todos"]
 			],
 
 			"order": [

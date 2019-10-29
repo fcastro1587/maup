@@ -121,7 +121,7 @@
 
           @can('file.index')
           <li class="header">IMAGENES</li>
-          <li><a href="{{ route('file.index')}}"><i class="fa  fa-image"></i><span>Cargar Imagenes</span></a></li>
+          <li><a href="{{ route('file.file')}}"><i class="fa  fa-image"></i><span>Cargar Imagenes</span></a></li>
           @endcan
 
           <!--@can('filters.index')

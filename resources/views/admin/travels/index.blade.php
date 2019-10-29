@@ -31,6 +31,7 @@
 							<th>NOCHES</th>
 							<th>DEPARTAMENTO</th>
 							<th>VIGENCIA</th>
+							<th>STATUS</th>
 							<th class="text-right">ACCIONES</th>
 						</tr>
 					</thead>
@@ -42,6 +43,7 @@
 							<th>NOCHES</th>
 							<th>DEPARTAMENTO</th>
 							<th>VIGENCIA</th>
+							<th>STATUS</th>
 							<th class="text-right">ACCIONES</th>
 						</tr>
 					</tfoot>
@@ -81,6 +83,17 @@
 				{
 					data: 'validity',
 					name: 'travels.validity'
+				},
+				{
+					data: 'status',
+					name: 'travels.status',
+					render: function(data) {
+						if (data) {
+							return '<small class="label bg-green">Activo</small>';
+						} else {
+							return '<small class="label bg-red">Inactivo</small>';
+						}
+					}
 				},
 				{
 					data: 'btn'

@@ -13,7 +13,7 @@
           <div class="col-md-6">
             <div class="form-group">
               @can('rooms.create')
-              <a href="{{route('rooms.create')}}" class="btn-dark pull-left">
+              <a href="{{route('rooms.create')}}" class="btn-xs btn-primary pull-left">
                 <i class="fa fa-fw fa-plus"></i>
                 crear
               </a>
@@ -38,8 +38,8 @@
 
               <td width="10">
                 @can('rooms.edit')
-                <a href="{{ route('rooms.edit', $rom->id) }}" class="btn btn-sm btn-success"><i class="fa fa-fw fa-pencil"></i>
-                  editar
+                <a href="{{ route('rooms.edit', $rom->id) }}" class="btn btn-xs btn-success"><i class="fa fa-fw fa-pencil"></i>
+                  
                 </a>
                 @endcan
               </td>

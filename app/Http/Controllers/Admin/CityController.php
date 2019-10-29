@@ -29,8 +29,12 @@ class CityController extends Controller
     {
       $city = City
       ::join('countries', 'countries.code_iata', '=', 'cities.country_code_iata')
-      ->select('cities.id','cities.name',
-               'countries.name_country');
+      ->select(
+               'cities.id',
+               'cities.name',
+               'countries.name_country'
+              )
+      ->orderby('countries.name_country', 'asc');
 
        
       return datatables()

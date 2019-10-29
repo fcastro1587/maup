@@ -22,7 +22,7 @@ class VisasController extends Controller
 
     public function index(Request $request)
     {
-      $visas    = Visa::orderby('id', 'asc')->get();
+      $visas    = Visa::orderby('id', 'desc')->get();
       $country  = Country::all();
 
       return view('admin.visas.index', compact('visas', 'country'));

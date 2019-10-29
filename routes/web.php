@@ -52,27 +52,22 @@ Route::resource('revistas',                'Admin\RevistasController');
 Route::get('admintc', 'Admin\AdminTController@admin')->name('admintc.admin')
      ->middleware('permission:admintc.admin');                //Tipo de Cambio
 
-Route::resource('file',                    'Admin\FileController');
-Route::resource('files-ajax',              'Admin\FilesController');
-Route::get('file/{var}/createfile',        'Admin\FileController@createfile')->name('file.createfile'); //esta ruta replasaria a la de create
-Route::get('files/{var}/createupload',     'Admin\FilesController@createupload')->name('files.createupload'); //solo subira archivos
-
-
-
 
 
 //images
-Route::resource('upload-files',               'Admin\UploadFilesController');  //bueno
-Route::get('upload-files/megaofertas/{var}',  'Admin\UploadFilesController@megaofertas')->name('upload-files.megaofertas');  //megaofertas
+Route::get('file',                            'Admin\UploadFilesController@file')->name('file.file');/* muestra imagenes*/
 
 Route::get('detalle',                         'Admin\UploadFilesController@indexdetalle')->name('uploadfiles.indexdetalle');
 Route::get('upload-files/detalle/{var}',      'Admin\UploadFilesController@detalle')->name('upload-files.detalle');  //detalle
 
-Route::get('homeslider',                      'Admin\UploadFilesController@indexhomeslider')->name('uploadfiles.indexhomeslider');
-Route::get('upload-files/homeslider/{var}',   'Admin\UploadFilesController@homeslider')->name('upload-files.homeslider');  //slider main
-
 Route::get('panoramic',                       'Admin\UploadFilesController@indexpanoramic')->name('uploadfiles.indexpanoramic');
 Route::get('upload-files/panoramic/{var}',    'Admin\UploadFilesController@panoramic')->name('upload-files.panoramic');  //panoramic
+
+Route::get('deptos',                          'Admin\UploadFilesController@indexdeptos')->name('uploadfiles.indexdeptos');
+Route::get('upload-files/deptos/{var}',       'Admin\UploadFilesController@deptos')->name('upload-files.deptos');  //departamentos
+
+Route::resource('upload-files',               'Admin\UploadFilesController');  //bueno
+Route::get('upload-files/megaofertas/{var}',  'Admin\UploadFilesController@megaofertas')->name('upload-files.megaofertas');  //megaofertas
 
 Route::get('temporada',                       'Admin\UploadFilesController@indextemporada')->name('uploadfiles.indextemporada');
 Route::get('upload-files/temporadas/{var}',   'Admin\UploadFilesController@temporadas')->name('upload-files.temporadas');  //temporada 
@@ -86,11 +81,13 @@ Route::get('upload-files/fav/{var}',          'Admin\UploadFilesController@fav')
 Route::get('listado',                         'Admin\UploadFilesController@indexlistado')->name('uploadfiles.indexlistado');
 Route::get('upload-files/listado/{var}',      'Admin\UploadFilesController@listado')->name('upload-files.listado');  //listado
 
+Route::get('homeslider',                      'Admin\UploadFilesController@indexhomeslider')->name('uploadfiles.indexhomeslider');
+Route::get('upload-files/homeslider/{var}',   'Admin\UploadFilesController@homeslider')->name('upload-files.homeslider');  //slider main
+
 Route::get('recommended',                     'Admin\UploadFilesController@indexrecommended')->name('uploadfiles.indexrecommended');
 Route::get('upload-files/recommended/{var}',  'Admin\UploadFilesController@recommended')->name('upload-files.recommended');  //recomendados
 
-Route::get('deptos',                          'Admin\UploadFilesController@indexdeptos')->name('uploadfiles.indexdeptos');
-Route::get('upload-files/deptos/{var}',       'Admin\UploadFilesController@deptos')->name('upload-files.deptos');  //departamentos
+
 });
 
 Route::get('upload-files/destro/{id}',            'Admin\UploadFilesController@destro')->name('upload-files.destro');//para temporadas travel

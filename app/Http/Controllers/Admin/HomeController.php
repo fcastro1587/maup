@@ -57,6 +57,7 @@ class HomeController extends Controller
         'travels.name as name_mt', 
         'travels.department', 
         'travels.validity',
+        'travels.status',
         'departments.name'
       );
 

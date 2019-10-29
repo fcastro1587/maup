@@ -43,7 +43,7 @@
 					data: 'name',
 					name: 'multimedia.name',
 					render: function(data, type, row) {
-						return '<img src="https://img1.mtmedia.com.mx/covers/' + data + '" width="100"/>';
+						return '<img src="https://img1.mtmedia.com.mx/covers/' + data + '" width="190"/>';
 					}
 				},
 				{
@@ -53,8 +53,8 @@
 
 			],
 			"lengthMenu": [
-				[10, 20, 50, -1],
-				[10, 20, 50, "Todos"]
+				[5, 20, 50, -1],
+				[5, 20, 50, "Todos"]
 			],
 
 			"order": [

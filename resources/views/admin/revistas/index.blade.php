@@ -14,7 +14,7 @@ $mes = strftime("%B");
 		<div class="panel panel-body">
 			<div class="col-md-3">
 				<div class="form-group">
-					<a href="{{ route('revistas.create') }}" class="btn-dark pull-left">
+					<a href="{{ route('revistas.create') }}" class="btn-xs btn-primary pull-left">
 						<i class="fa fa-fw fa-plus"></i>Nueva Revista
 					</a>
 				</div>
@@ -25,7 +25,7 @@ $mes = strftime("%B");
 	<div id="container">
 		<div class="col-md-12 ">
 			<div class="col-md-12 col-lg-12">
-				<h1 class="title">Mega<span> Traveler</span><br>
+				<h1 class="title">Mega<span> Traveler</span><br>	
 					<h2 style="font-size: 1.3em;font-family: 'Cinzel', serif;color: #132162;text-transform: uppercase;margin-top: 0px;margin-bottom: 30px;">
 						REVISTA PARA VIAJEROS
 					</h2>

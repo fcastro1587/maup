@@ -14,7 +14,7 @@
 
     <div class="panel-body">
         <div class="panel-heading">
-            <button type="button" name="create_record" id="create_record" class="btn btn-success btn-sm">Nuevo registro</button>
+            <button type="button" name="create_record" id="create_record" class="btn-xs btn-primary btn-sm">Nuevo registro</button>
         </div>
     </div>
 </div>

@@ -32,6 +32,10 @@ class UploadFilesController extends Controller
         $this->middleware('permission:upload-files.edit')->only(['edit', 'update']);
     }
 
+    public function file()
+    {
+        return view('admin.uploadfile.index');
+    }
 
     public function index()
     {

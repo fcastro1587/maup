@@ -10,7 +10,7 @@
           </div>
           <div class="col-md-6">
           <div class="form-group">
-          <a href="{{route('offers.create')}}" class="btn-dark pull-left">
+          <a href="{{route('offers.create')}}" class="btn-xs btn-primary pull-left">
             <i class="fa fa-fw fa-plus"></i>crear
           </a>
           </div>

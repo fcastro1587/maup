@@ -12,7 +12,7 @@
           <div class="col-md-6">
             <div class="form-group">
               @can('congratulations.create')
-              <a href="{{route('congratulations.create')}}" class="btn-dark pull-left">
+              <a href="{{route('congratulations.create')}}" class="btn-xs btn-primary pull-left">
                 <i class="fa fa-fw fa-plus"></i>crear
               </a>
               @endcan

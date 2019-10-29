@@ -13,7 +13,7 @@
 					<div class="col-md-12">
 						<div class="form-group">
 							@can('city.create')
-							<a href="{{route('city.create')}}" class="btn-dark pull-left">
+							<a href="{{route('city.create')}}" class="btn-xs btn-primary pull-left">
 								<i class="fa fa-fw fa-plus"></i>crear
 							</a>
 							@endcan
